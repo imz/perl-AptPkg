@@ -1,0 +1,84 @@
+libapt-pkg-perl (0.1.11) unstable; urgency=low
+
+  * AptPkg::Cache::PkgFile lookup method now correctly returns undef
+    when passed a package name that has no available versions (closes:
+    #186104).
+
+ -- Brendan O'Dea <bod@debian.org>  Thu, 25 Sep 2003 01:11:45 +1000
+
+libapt-pkg-perl (0.1.10) unstable; urgency=low
+
+  * Fix typo in AptPkg::Version docs (closes: #196551).
+  * Add "Priority" key to AptPkg::Cache::Version hashes.
+
+ -- Brendan O'Dea <bod@debian.org>  Sat, 19 Jul 2003 13:59:39 +1000
+
+libapt-pkg-perl (0.1.9) unstable; urgency=low
+
+  * Fix SEGV using AptPkg::Source (closes: #193052).
+  * Automagically use AptPkg::Config, AptPkg::System and initialise
+    $_config and $_system where required.
+
+  * Add tests for AptPkg::Source and auto-initialisation.
+
+ -- Brendan O'Dea <bod@debian.org>  Mon,  9 Jun 2003 22:27:09 +1000
+
+libapt-pkg-perl (0.1.8) unstable; urgency=low
+
+  * Add version to libapt-pkg-dev build dependency.
+  * Change section to "perl".
+
+ -- Brendan O'Dea <bod@debian.org>  Sat, 10 May 2003 10:14:23 +1000
+
+libapt-pkg-perl (0.1.7) unstable; urgency=low
+
+  * Update BuildDepends parameters for apt 0.5.5 .
+  * Rebuild for libapt-pkg 0.5.5 / c++ 3.2 (closes #192384).
+  * Minor doc additions to AptPkg(3pm).
+
+ -- Brendan O'Dea <bod@debian.org>  Sat, 10 May 2003 09:45:42 +1000
+
+libapt-pkg-perl (0.1.6) unstable; urgency=low
+
+  * Add source package handling (AptPkg::Source).
+
+ -- Brendan O'Dea <bod@debian.org>  Mon,  5 Aug 2002 20:53:04 +1000
+
+libapt-pkg-perl (0.1.5) unstable; urgency=low
+
+  * Build against perl 5.8.0 .
+  * Correct "ApkPkg" typo and document the AptPkg::Cache get, exists
+    and keys methods (closes: #147963).
+
+ -- Brendan O'Dea <bod@debian.org>  Mon, 29 Jul 2002 08:55:40 +1000
+
+libapt-pkg-perl (0.1.4) unstable; urgency=low
+
+  * Correct documentation (File attribute of AptPkg::Cache::VerFile).
+  * Add examples/apt-{version,cache} scripts (closes: #128439).
+
+ -- Brendan O'Dea <bod@debian.org>  Thu, 10 Jan 2002 19:06:47 +1100
+
+libapt-pkg-perl (0.1.3) unstable; urgency=low
+
+  * Fix typo in package description (closes: #128213). 
+
+ -- Brendan O'Dea <bod@debian.org>  Tue,  8 Jan 2002 16:21:29 +1100
+
+libapt-pkg-perl (0.1.2) unstable; urgency=low
+
+  * Include constants for pkgCache enumerations.
+  * Add CompTypeDeb dependency attribute.
+  * Provide numeric values for DepType, CompType and Flags.
+
+ -- Brendan O'Dea <bod@debian.org>  Mon,  7 Jan 2002 19:57:54 +1100
+
+libapt-pkg-perl (0.1.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Brendan O'Dea <bod@debian.org>  Thu,  3 Jan 2002 23:43:08 +1100
+
+Local variables:
+mode: debian-changelog
+End:

@@ -1,0 +1,2 @@
+deb file:/test stable main
+deb-src file:/test stable main

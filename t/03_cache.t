@@ -1,0 +1,288 @@
+#!/usr/bin/perl
+
+# $Id$
+# AptPkg::Cache tests
+
+BEGIN { print "1..63\n" }
+
+sub check_keys
+{
+    my ($test, $thing, $expect) = @_;
+    for my $key (keys %$expect)
+    {
+	print $thing->{$key} eq $expect->{$key}
+	    ? "ok $test\n"
+	    : "not ok $test # $thing->{$key} != $expect->{$key}\n";
+
+	$test++;
+    }
+
+    $test;
+}
+
+use AptPkg::Config '$_config';
+use AptPkg::System '$_system';
+use AptPkg::Cache;
+
+$_config->init;
+$_config->read_file('t/cache/etc/apt.conf');
+$_system = $_config->system;
+
+print "ok 1\n";
+
+my $cache = AptPkg::Cache->new;
+
+# cache created
+unless ($cache)
+{
+    print "not ok 2\n";
+    exit;
+}
+
+my $verfile; # for ->packages test
+
+# package "b" exists
+if (my $b = $cache->{b})
+{
+    print "ok 2\n";
+
+    # check some string values
+    check_keys 3, $b, {
+	Name => 'b',
+	Section => 'test',
+	SelectedState => 'Install',
+	InstState => 'Ok',
+	CurrentState => 'Installed',
+    };
+
+    # expected current version
+    print 'not ' unless $b->{CurrentVer}{VerStr} eq '0.2-1';
+    print "ok 8\n";
+
+    # installed and new versions are available
+    print 'not ' unless @{$b->{VersionList}} == 2;
+    print "ok 9\n";
+
+    # new version is first
+    print 'not ' unless $b->{VersionList}[0]{VerStr} eq '0.3-1';
+    print "ok 10\n";
+
+    if (my $f = $b->{VersionList}[0]{FileList})
+    {
+	$verfile = $f->[0];
+    }
+    else
+    {
+	print 'not ';
+    }
+
+    print "ok 11\n";
+
+    # followed by current version
+    print 'not ' unless $b->{VersionList}[1]{VerStr} eq '0.2-1';
+    print "ok 12\n";
+
+    # check rev depends
+    print 'not ' unless @{$b->{RevDependsList}} == 1;
+    print "ok 13\n";
+
+    my $r = $b->{RevDependsList}[0];
+
+    print 'not ' unless $r->{DepType} eq 'Depends';
+    print "ok 14\n";
+
+    print 'not ' unless $r->{TargetPkg}{Name} eq 'b';
+    print "ok 15\n";
+
+    print 'not ' unless $r->{CompType} eq '>=';
+    print "ok 16\n";
+
+    print 'not ' unless $r->{TargetVer} eq '0.2-3';
+    print "ok 17\n";
+}
+else
+{
+    print "not ok 2 # package b missing\n";
+    print "ok $_ # skip\n" for 3..17;
+}
+
+# package "a" exists
+if (my $a = $cache->{a})
+{
+    print "ok 18\n";
+
+    # check some string values
+    check_keys 19, $a, {
+	Name => 'a',
+	Section => 'test',
+	SelectedState => 'Purge',
+	InstState => 'Ok',
+	CurrentState => 'NotInstalled',
+    };
+
+    # expect one version to be available
+    print 'not ' unless @{$a->{VersionList}} == 1;
+    print "ok 24\n";
+
+    # check version
+    print 'not ' unless $a->{VersionList}[0]{VerStr} eq '0.1';
+    print "ok 25\n";
+
+    # check provides
+    print 'not ' unless @{$a->{VersionList}[0]{ProvidesList}} == 1;
+    print "ok 26\n";
+
+    my $p = $a->{VersionList}[0]{ProvidesList}[0];
+    print 'not ' unless $p->{OwnerPkg}{Name} eq 'a';
+    print "ok 27\n";
+
+    print 'not ' unless $p->{OwnerVer}{VerStr} eq '0.1';
+    print "ok 28\n";
+
+    # check depends
+    my $d = $a->{VersionList}[0]{DependsList};
+    my $depend;
+    my $conflict;
+
+    if ($d and @$d == 2)
+    {
+	for my $i (0, 1)
+	{
+	    for ($d->[$i]{DepType})
+	    {
+		/^Depends$/   and $depend = $i;
+		/^Conflicts$/ and $conflict = $i;
+	    }
+	}
+    }
+
+    if (defined $depend and defined $conflict)
+    {
+	print "ok 29\n";
+
+	print 'not ' unless $d->[$depend]{TargetPkg}{Name} eq 'b';
+	print "ok 30\n";
+
+	print 'not ' unless $d->[$depend]{CompType} eq '>=';
+	print "ok 31\n";
+
+	print 'not ' unless $d->[$depend]{TargetVer} eq '0.2-3';
+	print "ok 32\n";
+
+	print 'not ' unless $d->[$conflict]{TargetPkg}{Name} eq 'foo';
+	print "ok 33\n";
+    }
+    else
+    {
+	print "not ok 29 # bad depends\n";
+	print "ok $_ # skip\n" for 30..33;
+    }
+}
+else
+{
+    print "not ok 18 # package b missing\n";
+    print "ok $_ # skip\n" for 19..33;
+}
+
+# test files
+my $f = $cache->files;
+my $status;
+my $packages;
+
+if ($f and @$f == 2)
+{
+    for my $i (0, 1)
+    {
+	for ($f->[$i]{FileName})
+	{
+	    /\bstatus$/  and $status = $i;
+	    /_Packages$/ and $packages = $i;
+	}
+    }
+}
+
+if (defined $status and defined $packages)
+{
+    print "ok 34\n";
+
+    check_keys 35, $f->[$status], {
+	FileName => 't/cache/var/status',
+	IsOk => 1,
+	Archive => 'now',
+	IndexType => 'Debian dpkg status file',
+    };
+
+    check_keys 39, $f->[$packages], {
+	FileName => 't/cache/var/lists/_test_dists_stable_main_binary-i386_Packages',
+	IsOk => 1,
+	Origin => 'Debian',
+	Label => 'Debian',
+	Archive => 'stable',
+	Architecture => 'i386',
+	Version => '3.0',
+	Component => 'main',
+	IndexType => 'Debian Package Index',
+    };
+}
+else
+{
+    print "not ok 34 # bad ->files\n";
+    print "ok $_ # skip\n" for 35..47;
+}
+
+if (my $p = $cache->packages)
+{
+    # check by name
+    if (my $a = $p->lookup('a'))
+    {
+	print "ok 48\n";
+
+	check_keys 49, $a, {
+	    Name => 'a',
+	    Section => 'test',
+	    VerStr => '0.1',
+	    Maintainer => 'Brendan O\'Dea <bod@debian.org>',
+	    FileName => 'pool/main/a/a/a_0.1_i386.deb',
+	    MD5Hash => '0123456789abcdef0123456789abcdef',
+	    ShortDesc => 'Test Package "a"',
+	    LongDesc => qq/Test Package "a"\n This is a bogus package for the AptPkg::Cache test suite./,
+	};
+    }
+    else
+    {
+	print "not ok 48 # lookup by name failed\n";
+	print "ok $_ # skip\n" for 49..56;
+    }
+
+    # check by verfile
+    if ($verfile)
+    {
+	if (my $b = $p->lookup($verfile))
+	{
+	    print "ok 57\n";
+
+	    check_keys 58, $b, {
+		Name => 'b',
+		Maintainer => 'Brendan O\'Dea <bod@debian.org>',
+		FileName => 'pool/main/b/b/b_0.3-1_i386.deb',
+		MD5Hash => '0123456789abcdef0123456789abcdef',
+		ShortDesc => 'Test Package "b"',
+		LongDesc => qq/Test Package "b"\n This is a bogus package for the AptPkg::Cache test suite./,
+	    };
+	}
+	else
+	{
+	    print "not ok 57 # lookup by verfile failed\n";
+	    print "ok $_ # skip\n" for 58..63;
+	}
+    }
+    else
+    {
+	print "ok $_ # skip\n" for 57..63;
+    }
+}
+else
+{
+    print "not ok 48 # bad ->packages\n";
+    print "ok $_ # skip\n" for 49..63;
+}
