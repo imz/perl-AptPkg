@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.18 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.19 $[1] || 0.1;
 
 sub new
 {
@@ -311,6 +311,9 @@ InstState may be C<Ok>, C<ReInstReq>, C<HoldInst> or C<HoldReInstReq>.
 
 CurrentState may be C<NotInstalled>, C<UnPacked>, C<HalfConfigured>,
 C<HalfInstalled>, C<ConfigFiles> or C<Installed>.
+
+In a numeric context, SelectedState, InstState and CurrentState
+evaluate to an AptPkg::State:: constant.
 
 =item VersionList
 

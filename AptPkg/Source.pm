@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.2 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.3 $[1] || 0.1;
 
 sub new
 {
@@ -148,8 +148,14 @@ C<Build-Conflicts-Indep>.
 
 The values are a list of dependencies/conflicts with each item being a
 list containing the package name followed optionally by an operator
-and version number.  For possible operator values, see
-L<AptPkg(3pm)/"pkgCache::Dep::DepCompareOp">.
+and version number.
+
+Operator values evaluate to a comparison string* (>, >=, etc) or one
+of the AptPkg::Dep:: constants in a numeric context (see
+L<AptPkg(3pm)/"pkgCache::Dep::DepCompareOp">).
+
+*Note that this is a normalised, rather than Debian-style (>> vs >)
+string.
 
 =item Files
 

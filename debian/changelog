@@ -1,3 +1,11 @@
+libapt-pkg-perl (0.1.12) unstable; urgency=low
+
+  * Use enumerated constants in a numeric context for SelectedState,
+    CurrentState and InstState.  Provide a string version for
+    BuildDepends operators.  Closes: #227642.
+
+ -- Brendan O'Dea <bod@debian.org>  Sun, 20 Jun 2004 22:19:46 +1000
+
 libapt-pkg-perl (0.1.11) unstable; urgency=low
 
   * AptPkg::Cache::PkgFile lookup method now correctly returns undef

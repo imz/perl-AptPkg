@@ -41,7 +41,7 @@ if (my $a = $src->{a})
     check 4, $a->{Package} eq 'a';
     check 5, $a->{Section} eq 'test';
     check 6, $a->{Version} eq '0.1';
-    if ($a->{Binaries} and ref $a->{Binaries} == 'ARRAY')
+    if ($a->{Binaries} and ref $a->{Binaries} eq 'ARRAY')
     {
     	check 7, "@{$a->{Binaries}}" eq 'a';
     }
@@ -50,11 +50,11 @@ if (my $a = $src->{a})
     	print "not ok 7 # no binaries\n";
     }
 
-    if ($a->{BuildDepends} and ref $a->{BuildDepends} == 'HASH'
+    if ($a->{BuildDepends} and ref $a->{BuildDepends} eq 'HASH'
 	and my $b = $a->{BuildDepends}{'Build-Depends'})
     {
 	check  8, $b->[0][0] eq 'b';
-	check  9, $b->[0][1] eq AptPkg::Dep::GreaterEq;
+	check  9, $b->[0][1] == AptPkg::Dep::GreaterEq;
 	check 10, $b->[0][2] eq '0.2-42';
     }
     else
@@ -63,7 +63,7 @@ if (my $a = $src->{a})
 	print "ok $_ # skip\n" for 9..10;
     }
 
-    if ($a->{Files} and ref $a->{Files} == 'ARRAY')
+    if ($a->{Files} and ref $a->{Files} eq 'ARRAY')
     {
     	if (my ($dsc) = grep $_->{Type} eq 'dsc', @{$a->{Files}})
 	{

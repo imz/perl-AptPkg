@@ -580,50 +580,71 @@ pkgCache_PkgIterator::ProvidesList()
 unsigned long
 pkgCache_PkgIterator::Index()
 
-char *
+SV *
 pkgCache_PkgIterator::SelectedState()
+  PREINIT:
+    char *rv;
+
   CODE:
     switch ((*THIS)->SelectedState)
     {
-    case pkgCache::State::Unknown:	    RETVAL = "Unknown";		break;
-    case pkgCache::State::Install:	    RETVAL = "Install";		break;
-    case pkgCache::State::Hold:		    RETVAL = "Hold";		break;
-    case pkgCache::State::DeInstall:	    RETVAL = "DeInstall";	break;
-    case pkgCache::State::Purge:	    RETVAL = "Purge";		break;
-    default:				    RETVAL = "*error*";
+    case pkgCache::State::Unknown:	    rv = "Unknown";		break;
+    case pkgCache::State::Install:	    rv = "Install";		break;
+    case pkgCache::State::Hold:		    rv = "Hold";		break;
+    case pkgCache::State::DeInstall:	    rv = "DeInstall";		break;
+    case pkgCache::State::Purge:	    rv = "Purge";		break;
+    default:				    XSRETURN_UNDEF;
     }
+
+    RETVAL = newSViv((*THIS)->SelectedState);
+    sv_setpv(RETVAL, rv);
+    SvIOK_on(RETVAL);
 
   OUTPUT:
     RETVAL
 
-char *
+SV *
 pkgCache_PkgIterator::InstState()
+  PREINIT:
+    char *rv;
+
   CODE:
     switch ((*THIS)->InstState)
     {
-    case pkgCache::State::Ok:		    RETVAL = "Ok";		break;
-    case pkgCache::State::ReInstReq:	    RETVAL = "ReInstReq";	break;
-    case pkgCache::State::HoldInst:	    RETVAL = "HoldInst";	break;
-    case pkgCache::State::HoldReInstReq:    RETVAL = "HoldReInstReq";	break;
-    default:				    RETVAL = "*error*";
+    case pkgCache::State::Ok:		    rv = "Ok";			break;
+    case pkgCache::State::ReInstReq:	    rv = "ReInstReq";		break;
+    case pkgCache::State::HoldInst:	    rv = "HoldInst";		break;
+    case pkgCache::State::HoldReInstReq:    rv = "HoldReInstReq";	break;
+    default:				    XSRETURN_UNDEF;
     }
+
+    RETVAL = newSViv((*THIS)->InstState);
+    sv_setpv(RETVAL, rv);
+    SvIOK_on(RETVAL);
 
   OUTPUT:
     RETVAL
 
-char *
+SV *
 pkgCache_PkgIterator::CurrentState()
+  PREINIT:
+    char *rv;
+
   CODE:
     switch ((*THIS)->CurrentState)
     {
-    case pkgCache::State::NotInstalled:	    RETVAL = "NotInstalled";	break;
-    case pkgCache::State::UnPacked:	    RETVAL = "UnPacked";	break;
-    case pkgCache::State::HalfConfigured:   RETVAL = "HalfConfigured";	break;
-    case pkgCache::State::HalfInstalled:    RETVAL = "HalfInstalled";	break;
-    case pkgCache::State::ConfigFiles:	    RETVAL = "ConfigFiles";	break;
-    case pkgCache::State::Installed:	    RETVAL = "Installed";	break;
-    default:				    RETVAL = "*error*";
+    case pkgCache::State::NotInstalled:	    rv = "NotInstalled";	break;
+    case pkgCache::State::UnPacked:	    rv = "UnPacked";		break;
+    case pkgCache::State::HalfConfigured:   rv = "HalfConfigured";	break;
+    case pkgCache::State::HalfInstalled:    rv = "HalfInstalled";	break;
+    case pkgCache::State::ConfigFiles:	    rv = "ConfigFiles";		break;
+    case pkgCache::State::Installed:	    rv = "Installed";		break;
+    default:				    XSRETURN_UNDEF;
     }
+
+    RETVAL = newSViv((*THIS)->CurrentState);
+    sv_setpv(RETVAL, rv);
+    SvIOK_on(RETVAL);
 
   OUTPUT:
     RETVAL
@@ -1111,7 +1132,12 @@ pkgSrcRecords::Find(src, src_only = false)
 	    AV *dep = newAV();
 	    av_push(dep, newSVpvn(b->Package.c_str(), b->Package.size()));
 	    if (b->Op || !b->Version.empty())
-		av_push(dep, newSViv(b->Op));
+	    {
+		SV *o = newSViv(b->Op);
+		sv_setpv(o, pkgCache::CompType(b->Op));
+		SvIOK_on(o);
+		av_push(dep, o);
+	    }
 
 	    if (!b->Version.empty())
 		av_push(dep, newSVpvn(b->Version.c_str(), b->Version.size()));
