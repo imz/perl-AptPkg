@@ -12,7 +12,6 @@
 #include <apt-pkg/cmndline.h>
 #include <apt-pkg/progress.h>
 #include <apt-pkg/pkgsystem.h>
-#include <apt-pkg/deblistparser.h> /* CheckDep uses Debian format for op_str */
 #include <apt-pkg/sourcelist.h>
 #include <apt-pkg/version.h>
 #include <apt-pkg/cachefile.h>
@@ -408,22 +407,10 @@ pkgVersioningSystem::CmpReleaseVer(a, b)
     char *b
 
 bool
-pkgVersioningSystem::CheckDep(pkg, op_str, dep)
+pkgVersioningSystem::CheckDep(pkg, op, dep)
     char *pkg
-    char *op_str
+    unsigned op
     char *dep
-  PREINIT:
-    unsigned op;
-
-  INIT:
-    if (*debListParser::ConvertRelation(op_str, op))
-    {
-	warn("invalid version relation `%s'", op_str);
-	XSRETURN_UNDEF;
-    }
-
-  C_ARGS:
-    pkg, op, dep
 
 string
 pkgVersioningSystem::UpstreamVersion(str)

@@ -8,6 +8,7 @@ WriteMakefile(
     NAME	 => 'AptPkg',
     VERSION_FROM => 'AptPkg.pm',
     CC		 => 'c++',
+    LD		 => 'c++',
     OBJECT	 => '$(O_FILES)',
     LIBS	 => ['-lapt-pkg'],
     XSOPT	 => '-C++',

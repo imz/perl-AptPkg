@@ -48,7 +48,7 @@ while ($_ = shift)
     };
 
     # rel_compare REL1 REL2
-    /^rel(?:[_-]comp)?$/ and do {
+    /^rel(?:[_-]comp(?:are)?)?$/ and do {
 	die "Usage: $self rel_compare REL1 REL2\n" if @ARGV < 2;
 	my ($ver1, $ver2) = splice @ARGV, 0, 2;
 	print "* release version `$ver1' is ",

@@ -6,6 +6,7 @@ require 5.005_62;
 use strict;
 use warnings;
 use AptPkg;
+use Carp;
 
 require Exporter;
 
@@ -13,13 +14,35 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw();
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.5 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
 
 sub label       { shift->Label(@_) }
 sub compare     { shift->CmpVersion(@_) }
 sub rel_compare { shift->CmpReleaseVer(@_) }
-sub check_dep   { shift->CheckDep(@_) }
 sub upstream    { shift->UpstreamVersion(@_) }
+
+{
+    my %DEB_RELATION = (
+	'<<'	=> AptPkg::Dep::Less,
+	'<='	=> AptPkg::Dep::LessEq,
+	'='	=> AptPkg::Dep::Equals,
+	'>='	=> AptPkg::Dep::GreaterEq,
+	'>>'	=> AptPkg::Dep::Greater,
+
+	# deprecated
+	'<'	=> AptPkg::Dep::LessEq,
+	'>'	=> AptPkg::Dep::GreaterEq,
+    );
+
+    sub check_dep
+    {
+	my $self = shift;
+	my ($pkg, $op_str, $dep) = @_;
+	my $op = $DEB_RELATION{$op_str} || croak "invalid relation for check_dep `$op_str'";
+
+	$self->CheckDep($pkg, $op, $dep);
+    }
+}
 
 1;
 

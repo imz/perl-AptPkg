@@ -48,11 +48,11 @@ binary-arch: build install
 	dh_installchangelogs
 	dh_installexamples examples/*
 	dh_link
-	dh_strip
 	dh_compress
 	dh_fixperms
+	dh_strip
 	dh_installdeb
-	dh_perl
+	dh_perl -d
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums

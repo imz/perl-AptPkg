@@ -1,3 +1,21 @@
+libapt-pkg-perl (0.1.13) unstable; urgency=low
+
+  * Fix ordering of dh_fixperms/dh_strip such that strip works.
+  * Fix examples/apt-version argument parsing (closes: #276254).
+  * Remove requirement for apt-pkg/deblistparser.h to allow for
+    building on rpm-based systems.  Allow for rpm in t/01_system.t .
+
+ -- Brendan O'Dea <bod@debian.org>  Thu, 14 Oct 2004 11:36:07 +1000
+
+libapt-pkg-perl (0.1.12-0.1) unstable; urgency=high
+
+  * (NMU because I could not reach the maintainer)
+    Removed perl dependency. This way, localization-config can be
+    included on debian-installer netinst ISO without pulling all the perl
+    stuff. (~100KB dependency instead of ~5MB). 
+
+ -- Konstantinos Margaritis <markos@debian.org>  Wed, 29 Sep 2004 11:11:05 +0300
+
 libapt-pkg-perl (0.1.12) unstable; urgency=low
 
   * Use enumerated constants in a numeric context for SelectedState,

@@ -7,6 +7,7 @@ use strict;
 use warnings;
 use AptPkg;
 use AptPkg::hash;
+use Carp;
 
 require Exporter;
 
@@ -14,7 +15,7 @@ our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT_OK = qw($_config);
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.5 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
 our $_config = __PACKAGE__->new($AptPkg::_config::_config);
 
 sub get
@@ -71,7 +72,7 @@ sub AUTOLOAD
     my $xs = $self->_xs;
     my $sub = $xs->can($method);
 
-    die "method `$method' not implemented" unless $sub;
+    croak "method `$method' not implemented" unless $sub;
 
     unshift @_, $xs;
     goto &$sub;
