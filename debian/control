@@ -2,8 +2,8 @@ Source: libapt-pkg-perl
 Section: perl
 Priority: optional
 Maintainer: Brendan O'Dea <bod@debian.org>
-Build-Depends: perl (>= 5.8.0-6), debhelper (>> 3.0.18), libapt-pkg-dev (>= 0.5.5)
-Standards-Version: 3.5.9
+Build-Depends: perl (>= 5.8.0-6), debhelper (>> 3.0.18), libapt-pkg-dev (>= 0.6.39)
+Standards-Version: 3.6.2
 
 Package: libapt-pkg-perl
 Architecture: any

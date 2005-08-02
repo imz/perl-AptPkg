@@ -1,3 +1,22 @@
+libapt-pkg-perl (0.1.16) unstable; urgency=low
+
+  * Re-build for apt 0.6.39.
+
+ -- Brendan O'Dea <bod@debian.org>  Tue,  2 Aug 2005 20:54:45 +1000
+
+libapt-pkg-perl (0.1.15) unstable; urgency=low
+
+  * Add SourcePkg to $cache->lookup docs.
+
+ -- Brendan O'Dea <bod@debian.org>  Sat,  2 Jul 2005 00:48:47 +1000
+
+libapt-pkg-perl (0.1.14) unstable; urgency=low
+
+  * Build with apt 0.6.
+  * Create new test Releases file.
+
+ -- Brendan O'Dea <bod@debian.org>  Tue, 28 Jun 2005 20:19:22 +1000
+
 libapt-pkg-perl (0.1.13) unstable; urgency=low
 
   * Fix ordering of dh_fixperms/dh_strip such that strip works.

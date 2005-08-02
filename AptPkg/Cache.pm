@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.19 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.20 $[1] || 0.1;
 
 sub new
 {
@@ -576,8 +576,8 @@ The hash contains the following keys:
 
 =over 4
 
-C<Name>, C<Maintainer>, C<FileName>, C<MD5Hash>, C<ShortDesc> and
-C<LongDesc>.
+C<FileName>, C<MD5Hash>, C<SourcePkg>, C<Maintainer>, C<ShortDesc>,
+C<LongDesc> and C<Name>.
 
 =back
 
