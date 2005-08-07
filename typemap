@@ -76,85 +76,85 @@ T_STRING
 	$var = (char *) SvPV_nolen($arg);
 
 T_CONFIG
-	if (sv_derived_from($arg, \"AptPkg::_config\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_config\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::_config\");
 
 T_CONFIG_ITEM
-	if (sv_derived_from($arg, \"AptPkg::Config::_item\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Config::_item\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Config::_item\");
 
 T_PKG_SYSTEM
-	if (sv_derived_from($arg, \"AptPkg::System\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::System\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::System\");
 
 T_PKG_VER_SYSTEM
-	if (sv_derived_from($arg, \"AptPkg::Version\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Version\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Version\");
 
 T_PKG_CACHE_FILE
-	if (sv_derived_from($arg, \"AptPkg::_cache\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_cache\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::_cache\");
 
 T_PKG_CACHE_PKG_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_package\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_package\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_package\");
 
 T_PKG_CACHE_DEP_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_depends\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_depends\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_depends\");
 
 T_PKG_CACHE_VER_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_version\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_version\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_version\");
 
 T_PKG_CACHE_PRV_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_provides\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_provides\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_provides\");
 
 T_PKG_CACHE_PKG_FILE_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_pkg_file\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_pkg_file\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_pkg_file\");
 
 T_PKG_CACHE_VER_FILE_ITERATOR
-	if (sv_derived_from($arg, \"AptPkg::Cache::_ver_file\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::Cache::_ver_file\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::Cache::_ver_file\");
 
 T_PKG_RECORDS
-	if (sv_derived_from($arg, \"AptPkg::_pkg_records\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_pkg_records\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::_pkg_records\");
 
 T_PKG_SOURCE_LIST
-	if (sv_derived_from($arg, \"AptPkg::_pkg_source_list\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_pkg_source_list\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::_pkg_src_records\");
 
 T_PKG_SRC_RECORDS
-	if (sv_derived_from($arg, \"AptPkg::_pkg_src_records\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_pkg_src_records\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
 	    croak(\"$var is not of type AptPkg::_pkg_src_records\");

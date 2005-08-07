@@ -15,7 +15,7 @@ our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT_OK = qw($_config);
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.7 $[1] || 0.1;
 our $_config = __PACKAGE__->new($AptPkg::_config::_config);
 
 sub get
@@ -54,6 +54,7 @@ sub init
 
 sub system
 {
+    require AptPkg::System;
     AptPkg::_init_system shift->_xs;
 }
 

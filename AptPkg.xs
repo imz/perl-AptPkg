@@ -100,7 +100,7 @@ static void auto_init(pTHX_ int required)
    the global _system (ick) */
 static int _system_set(pTHX_ SV *sv, MAGIC *mg)
 {
-    if (sv_derived_from(sv, "AptPkg::System"))
+    if (SvROK(sv) && sv_derived_from(sv, "AptPkg::System"))
     {
 	init_done |= INIT_SYSTEM;
 	_system = (pkgSystem *) SvIV((SV *) SvRV(sv));

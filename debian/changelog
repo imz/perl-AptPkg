@@ -1,3 +1,11 @@
+libapt-pkg-perl (0.1.17) unstable; urgency=low
+
+  * Re-build for apt 0.6.40.1.
+  * Auto-load ::System and ::Version (closes: #316768).
+  * typemap: require object instances, not classes (closes: #321303).
+
+ -- Brendan O'Dea <bod@debian.org>  Mon,  8 Aug 2005 00:03:14 +1000
+
 libapt-pkg-perl (0.1.16) unstable; urgency=low
 
   * Re-build for apt 0.6.39.

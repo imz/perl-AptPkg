@@ -13,14 +13,18 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw($_system);
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.3 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.4 $[1] || 0.1;
 our $_system;
 
 sub label      { shift->Label(@_) }
-sub versioning { shift->VS(@_) }
 sub lock       { shift->Lock(@_) }
 sub unlock     { shift->UnLock(@_) }
-sub manager    { shift->CreatePM(@_) }
+
+sub versioning
+{
+    require AptPkg::Version;
+    shift->VS(@_)
+}
 
 1;
 
@@ -62,10 +66,6 @@ Return the description of the packaging system, for example:
 
 for Debian systems.
 
-=item versioning
-
-Return an instance of the AptPkg::Version class for this system.
-
 =item lock
 
 Lock the packaging system.
@@ -73,6 +73,10 @@ Lock the packaging system.
 =item unlock(I<QUIET>)
 
 Unlock the packaging system, ignoring errors if I<QUIET> is non-zero.
+
+=item versioning
+
+Return an instance of the AptPkg::Version class for this system.
 
 =back
 
