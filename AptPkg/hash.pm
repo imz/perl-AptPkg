@@ -5,8 +5,9 @@ package AptPkg::hash;
 require 5.005_62;
 use strict;
 use warnings;
+use Scalar::Util 'weaken';
 
-our $VERSION = qw$Revision: 1.4 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.5 $[1] || 0.1;
 
 sub new
 {
@@ -53,7 +54,9 @@ sub keys
 sub TIEHASH
 {
     my $class = shift;
-    bless [@_], $class;
+    my $self = [@_];
+    weaken $self->[0]; # prevent reference loop
+    bless $self, $class;
 }
 
 sub FETCH	{ shift->[0]->get(@_) }

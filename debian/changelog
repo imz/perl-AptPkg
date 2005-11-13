@@ -1,3 +1,11 @@
+libapt-pkg-perl (0.1.18) unstable; urgency=low
+
+  * Break reference loop in AptPkg::hash (closes: #323845).
+  * Rebuild against current g++ and libapt-pkg-dev (closes: #335211,
+    #336686, et al.).
+
+ -- Brendan O'Dea <bod@debian.org>  Sun, 13 Nov 2005 18:36:24 +1100
+
 libapt-pkg-perl (0.1.17) unstable; urgency=low
 
   * Re-build for apt 0.6.40.1.
