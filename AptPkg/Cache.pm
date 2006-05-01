@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.20 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.21 $[1] || 0.1;
 
 sub new
 {
@@ -34,10 +34,8 @@ sub files
 sub packages
 {
     my $self = shift;
-    $self->_priv->{packages} ||= bless {
-	cache    => $self,
-	packages => $self->_xs->Packages
-    }, 'AptPkg::PkgRecords';
+    $self->_priv->{packages} ||=
+	bless \$self->_xs->Packages, 'AptPkg::PkgRecords';
 }
 
 sub exists { shift->_xs->FindPkg(@_) }
@@ -200,16 +198,21 @@ package AptPkg::PkgRecords;
 sub lookup
 {
     my ($self, $pack) = @_;
+    my $xs = $$self;
     my %extra;
     unless (ref $pack)
     {
-	my $p = $self->{cache}{$pack}		or return;
+	my $p = do {
+	    my $_p = $xs->cache->FindPkg($pack)	or return;
+	    AptPkg::Cache::Package->new($_p);
+	};
+
 	my $v = ($p->{VersionList} || [])->[0]	or return;
 	$pack = ($v->{FileList}    || [])->[0]	or return;
 	$extra{$_} = $v->{$_} for qw/Section VerStr/;
     }
 
-    my @r = $self->{packages}->Lookup($pack->_xs) or return;
+    my @r = $xs->Lookup($pack->_xs) or return;
     push @r, %extra;
     wantarray ? @r : { @r };
 }

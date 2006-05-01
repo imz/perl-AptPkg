@@ -1,3 +1,17 @@
+libapt-pkg-perl (0.1.20) unstable; urgency=low
+
+  * Use $(CURDIR) [make] rather than $(PWD) [sh] in debian/rules
+    (closes: #365534).
+
+ -- Brendan O'Dea <bod@debian.org>  Mon,  1 May 2006 23:34:08 +1000
+
+libapt-pkg-perl (0.1.19) unstable; urgency=low
+
+  * Ensure that parent objects persist for the life of the child. 
+    Thanks to Niko Tyni for identifying the problem (closes: #317058).
+
+ -- Brendan O'Dea <bod@debian.org>  Sun, 30 Apr 2006 02:30:38 +1000
+
 libapt-pkg-perl (0.1.18) unstable; urgency=low
 
   * Break reference loop in AptPkg::hash (closes: #323845).

@@ -27,13 +27,32 @@
 
 /* XS has grief with colons */
 #define Configuration_Item	    Configuration::Item
-#define pkgCache_PkgIterator	    pkgCache::PkgIterator
-#define pkgCache_VerIterator	    pkgCache::VerIterator
-#define pkgCache_DepIterator	    pkgCache::DepIterator
-#define pkgCache_PrvIterator	    pkgCache::PrvIterator
-#define pkgCache_PkgFileIterator    pkgCache::PkgFileIterator
-#define pkgCache_VerFileIterator    pkgCache::VerFileIterator
 #define pkgSrcRecords_Parser	    pkgSrcRecords::Parser
+
+/* ensure parent SV persists for the life of the child */
+template <class T, class A> class parented : public T {
+public:
+    SV *parent_sv;
+
+    inline parented(SV* p, A &a) : T(a) {
+	dTHX;
+	parent_sv = SvREFCNT_inc(p);
+    };
+
+    inline ~parented() {
+	dTHX;
+	SvREFCNT_dec(parent_sv);
+    };
+};
+
+#define THIS_sv			    ST(0)
+#define pkgRecords_p		    parented<pkgRecords, pkgCache>
+#define pkgCache_PkgIterator_p	    parented<pkgCache::PkgIterator, pkgCache::PkgIterator>
+#define pkgCache_PkgFileIterator_p  parented<pkgCache::PkgFileIterator, pkgCache::PkgFileIterator>
+#define pkgCache_VerIterator_p	    parented<pkgCache::VerIterator, pkgCache::VerIterator>
+#define pkgCache_DepIterator_p	    parented<pkgCache::DepIterator, pkgCache::DepIterator>
+#define pkgCache_PrvIterator_p	    parented<pkgCache::PrvIterator, pkgCache::PrvIterator>
+#define pkgCache_VerFileIterator_p  parented<pkgCache::VerFileIterator, pkgCache::VerFileIterator>
 
 /* handle warnings/errors */
 static void handle_errors(int fatal)
@@ -441,28 +460,29 @@ pkgCacheFile::Open(lock = false)
 void
 pkgCacheFile::Close()
 
-pkgCache_PkgIterator *
+pkgCache_PkgIterator_p *
 pkgCacheFile::FindPkg(name)
     string name
   CODE:
-    pkgCache_PkgIterator p = (*THIS)->FindPkg(name);
+    pkgCache *cache = *THIS;
+    pkgCache::PkgIterator p = cache->FindPkg(name);
     if (p.end())
 	XSRETURN_UNDEF;
 
-    RETVAL = new pkgCache_PkgIterator(p);
+    RETVAL = new pkgCache_PkgIterator_p(THIS_sv, p);
 
   OUTPUT:
     RETVAL
 
-pkgCache_PkgIterator *
+pkgCache_PkgIterator_p *
 pkgCacheFile::PkgBegin()
   CODE:
-    pkgCache *c = *THIS;
-    pkgCache_PkgIterator p = c->PkgBegin();
+    pkgCache *cache = *THIS;
+    pkgCache::PkgIterator p = cache->PkgBegin();
     if (p.end())
 	XSRETURN_UNDEF;
 
-    RETVAL = new pkgCache_PkgIterator(p);
+    RETVAL = new pkgCache_PkgIterator_p(THIS_sv, p);
 
   OUTPUT:
     RETVAL
@@ -471,9 +491,9 @@ SV *
 pkgCacheFile::FileList()
   PPCODE:
     pkgCache *cache = *THIS;
-    for (pkgCache_PkgFileIterator i = cache->FileBegin(); !i.end(); i++)
+    for (pkgCache::PkgFileIterator i = cache->FileBegin(); !i.end(); i++)
     {
-	pkgCache_PkgFileIterator *f = new pkgCache_PkgFileIterator(i);
+	pkgCache_PkgFileIterator_p *f = new pkgCache_PkgFileIterator_p(THIS_sv, i);
 	SV *file = sv_newmortal();
 	sv_setref_pv(file, "AptPkg::Cache::_pkg_file", (void *) f);
 	XPUSHs(file);
@@ -483,7 +503,7 @@ SV *
 pkgCacheFile::Packages()
   CODE:
     pkgCache *cache = *THIS;
-    pkgRecords *r = new pkgRecords(*cache);
+    pkgRecords_p *r = new pkgRecords_p(THIS_sv, *cache);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::_pkg_records", (void *) r);
 
   OUTPUT:
@@ -492,10 +512,10 @@ pkgCacheFile::Packages()
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_package
 
 void
-pkgCache_PkgIterator::DESTROY()
+pkgCache_PkgIterator_p::DESTROY()
 
 int
-pkgCache_PkgIterator::Next()
+pkgCache_PkgIterator_p::Next()
   CODE:
     (*THIS)++;
     RETVAL = !THIS->end();
@@ -504,7 +524,7 @@ pkgCache_PkgIterator::Next()
     RETVAL
 
 char *
-pkgCache_PkgIterator::Name()
+pkgCache_PkgIterator_p::Name()
   CODE:
     RETVAL = (char *) THIS->Name();
 
@@ -512,7 +532,7 @@ pkgCache_PkgIterator::Name()
     RETVAL
 
 char *
-pkgCache_PkgIterator::Section()
+pkgCache_PkgIterator_p::Section()
   CODE:
     RETVAL = (char *) THIS->Section();
 
@@ -520,55 +540,56 @@ pkgCache_PkgIterator::Section()
     RETVAL
 
 SV *
-pkgCache_PkgIterator::VersionList()
+pkgCache_PkgIterator_p::VersionList()
   PPCODE:
-    for (pkgCache_VerIterator i = THIS->VersionList(); !i.end(); i++)
+    for (pkgCache::VerIterator i = THIS->VersionList(); !i.end(); i++)
     {
-	pkgCache_VerIterator *v = new pkgCache_VerIterator(i);
+	pkgCache_VerIterator_p *v = new pkgCache_VerIterator_p(THIS_sv, i);
 	SV *ver = sv_newmortal();
 	sv_setref_pv(ver, "AptPkg::Cache::_version", (void *) v);
 	XPUSHs(ver);
     }
 
 SV *
-pkgCache_PkgIterator::CurrentVer()
+pkgCache_PkgIterator_p::CurrentVer()
   CODE:
     if (!(*THIS)->CurrentVer)
 	XSRETURN_UNDEF;
 
-    pkgCache_VerIterator *v = new pkgCache_VerIterator(THIS->CurrentVer());
+    pkgCache::VerIterator i = THIS->CurrentVer();
+    pkgCache_VerIterator_p *v = new pkgCache_VerIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_version", (void *) v);
 
   OUTPUT:
     RETVAL
 
 SV *
-pkgCache_PkgIterator::RevDependsList()
+pkgCache_PkgIterator_p::RevDependsList()
   PPCODE:
-    for (pkgCache_DepIterator i = THIS->RevDependsList(); !i.end(); i++)
+    for (pkgCache::DepIterator i = THIS->RevDependsList(); !i.end(); i++)
     {
-	pkgCache_DepIterator *d = new pkgCache_DepIterator(i);
+	pkgCache_DepIterator_p *d = new pkgCache_DepIterator_p(THIS_sv, i);
 	SV *dep = sv_newmortal();
 	sv_setref_pv(dep, "AptPkg::Cache::_depends", (void *) d);
 	XPUSHs(dep);
     }
 
 SV *
-pkgCache_PkgIterator::ProvidesList()
+pkgCache_PkgIterator_p::ProvidesList()
   PPCODE:
-    for (pkgCache_PrvIterator i = THIS->ProvidesList(); !i.end(); i++)
+    for (pkgCache::PrvIterator i = THIS->ProvidesList(); !i.end(); i++)
     {
-	pkgCache_PrvIterator *p = new pkgCache_PrvIterator(i);
+	pkgCache_PrvIterator_p *p = new pkgCache_PrvIterator_p(THIS_sv, i);
 	SV *prv = sv_newmortal();
 	sv_setref_pv(prv, "AptPkg::Cache::_provides", (void *) p);
 	XPUSHs(prv);
     }
 
 unsigned long
-pkgCache_PkgIterator::Index()
+pkgCache_PkgIterator_p::Index()
 
 SV *
-pkgCache_PkgIterator::SelectedState()
+pkgCache_PkgIterator_p::SelectedState()
   PREINIT:
     char *rv;
 
@@ -591,7 +612,7 @@ pkgCache_PkgIterator::SelectedState()
     RETVAL
 
 SV *
-pkgCache_PkgIterator::InstState()
+pkgCache_PkgIterator_p::InstState()
   PREINIT:
     char *rv;
 
@@ -613,7 +634,7 @@ pkgCache_PkgIterator::InstState()
     RETVAL
 
 SV *
-pkgCache_PkgIterator::CurrentState()
+pkgCache_PkgIterator_p::CurrentState()
   PREINIT:
     char *rv;
 
@@ -637,7 +658,7 @@ pkgCache_PkgIterator::CurrentState()
     RETVAL
 
 SV *
-pkgCache_PkgIterator::Flags()
+pkgCache_PkgIterator_p::Flags()
   CODE:
     string flags = "";
     if ((*THIS)->Flags & pkgCache::Flag::Auto)
@@ -665,10 +686,10 @@ pkgCache_PkgIterator::Flags()
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_version
 
 void
-pkgCache_VerIterator::DESTROY()
+pkgCache_VerIterator_p::DESTROY()
 
 char *
-pkgCache_VerIterator::VerStr()
+pkgCache_VerIterator_p::VerStr()
   CODE:
     RETVAL = (char *) THIS->VerStr();
 
@@ -676,7 +697,7 @@ pkgCache_VerIterator::VerStr()
     RETVAL
 
 char *
-pkgCache_VerIterator::Section()
+pkgCache_VerIterator_p::Section()
   CODE:
     RETVAL = (char *) THIS->Section();
 
@@ -684,7 +705,7 @@ pkgCache_VerIterator::Section()
     RETVAL
 
 char *
-pkgCache_VerIterator::Arch()
+pkgCache_VerIterator_p::Arch()
   CODE:
     RETVAL = (char *) THIS->Arch();
 
@@ -692,52 +713,53 @@ pkgCache_VerIterator::Arch()
     RETVAL
 
 SV *
-pkgCache_VerIterator::ParentPkg()
+pkgCache_VerIterator_p::ParentPkg()
   CODE:
-    pkgCache_PkgIterator *p = new pkgCache_PkgIterator(THIS->ParentPkg());
+    pkgCache::PkgIterator i = THIS->ParentPkg();
+    pkgCache_PkgIterator_p *p = new pkgCache_PkgIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_package", (void *) p);
 
   OUTPUT:
     RETVAL
 
 SV *
-pkgCache_VerIterator::DependsList()
+pkgCache_VerIterator_p::DependsList()
   PPCODE:
-    for (pkgCache_DepIterator i = THIS->DependsList(); !i.end(); i++)
+    for (pkgCache::DepIterator i = THIS->DependsList(); !i.end(); i++)
     {
-	pkgCache_DepIterator *d = new pkgCache_DepIterator(i);
+	pkgCache_DepIterator_p *d = new pkgCache_DepIterator_p(THIS_sv, i);
 	SV *dep = sv_newmortal();
 	sv_setref_pv(dep, "AptPkg::Cache::_depends", (void *) d);
 	XPUSHs(dep);
     }
 
 SV *
-pkgCache_VerIterator::ProvidesList()
+pkgCache_VerIterator_p::ProvidesList()
   PPCODE:
-    for (pkgCache_PrvIterator i = THIS->ProvidesList(); !i.end(); i++)
+    for (pkgCache::PrvIterator i = THIS->ProvidesList(); !i.end(); i++)
     {
-	pkgCache_PrvIterator *p = new pkgCache_PrvIterator(i);
+	pkgCache_PrvIterator_p *p = new pkgCache_PrvIterator_p(THIS_sv, i);
 	SV *prv = sv_newmortal();
 	sv_setref_pv(prv, "AptPkg::Cache::_provides", (void *) p);
 	XPUSHs(prv);
     }
 
 SV *
-pkgCache_VerIterator::FileList()
+pkgCache_VerIterator_p::FileList()
   PPCODE:
-    for (pkgCache_VerFileIterator i = THIS->FileList(); !i.end(); i++)
+    for (pkgCache::VerFileIterator i = THIS->FileList(); !i.end(); i++)
     {
-	pkgCache_VerFileIterator *f = new pkgCache_VerFileIterator(i);
+	pkgCache_VerFileIterator_p *f = new pkgCache_VerFileIterator_p(THIS_sv, i);
 	SV *file = sv_newmortal();
 	sv_setref_pv(file, "AptPkg::Cache::_ver_file", (void *) f);
 	XPUSHs(file);
     }
 
 unsigned long
-pkgCache_VerIterator::Index()
+pkgCache_VerIterator_p::Index()
 
 SV *
-pkgCache_VerIterator::Priority()
+pkgCache_VerIterator_p::Priority()
   CODE:
     char const *p = THIS->PriorityType();
     RETVAL = newSViv((*THIS)->Priority);
@@ -750,10 +772,10 @@ pkgCache_VerIterator::Priority()
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_depends
 
 void
-pkgCache_DepIterator::DESTROY()
+pkgCache_DepIterator_p::DESTROY()
 
 char *
-pkgCache_DepIterator::TargetVer()
+pkgCache_DepIterator_p::TargetVer()
   CODE:
     RETVAL = (char *) THIS->TargetVer();
 
@@ -761,37 +783,40 @@ pkgCache_DepIterator::TargetVer()
     RETVAL
 
 SV *
-pkgCache_DepIterator::TargetPkg()
+pkgCache_DepIterator_p::TargetPkg()
   CODE:
-    pkgCache_PkgIterator *p = new pkgCache_PkgIterator(THIS->TargetPkg());
+    pkgCache::PkgIterator i = THIS->TargetPkg();
+    pkgCache_PkgIterator_p *p = new pkgCache_PkgIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_package", (void *) p);
 
   OUTPUT:
     RETVAL
 
 SV *
-pkgCache_DepIterator::ParentVer()
+pkgCache_DepIterator_p::ParentVer()
   CODE:
-    pkgCache_VerIterator *v = new pkgCache_VerIterator(THIS->ParentVer());
+    pkgCache::VerIterator i = THIS->ParentVer();
+    pkgCache_VerIterator_p *v = new pkgCache_VerIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_version", (void *) v);
 
   OUTPUT:
     RETVAL
 
 SV *
-pkgCache_DepIterator::ParentPkg()
+pkgCache_DepIterator_p::ParentPkg()
   CODE:
-    pkgCache_PkgIterator *p = new pkgCache_PkgIterator(THIS->ParentPkg());
+    pkgCache::PkgIterator i = THIS->ParentPkg();
+    pkgCache_PkgIterator_p *p = new pkgCache_PkgIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_package", (void *) p);
 
   OUTPUT:
     RETVAL
 
 unsigned long
-pkgCache_DepIterator::Index()
+pkgCache_DepIterator_p::Index()
 
 SV *
-pkgCache_DepIterator::CompType()
+pkgCache_DepIterator_p::CompType()
   CODE:
     RETVAL = newSViv((*THIS)->CompareOp);
     sv_setpv(RETVAL, (char *) THIS->CompType());
@@ -801,7 +826,7 @@ pkgCache_DepIterator::CompType()
     RETVAL
 
 SV *
-pkgCache_DepIterator::CompTypeDeb()
+pkgCache_DepIterator_p::CompTypeDeb()
   CODE:
     RETVAL = newSViv((*THIS)->CompareOp);
     sv_setpv(RETVAL, (char *) THIS->Cache()->CompTypeDeb((*THIS)->CompareOp));
@@ -811,7 +836,7 @@ pkgCache_DepIterator::CompTypeDeb()
     RETVAL
 
 SV *
-pkgCache_DepIterator::DepType()
+pkgCache_DepIterator_p::DepType()
   CODE:
     RETVAL = newSViv((*THIS)->Type);
     sv_setpv(RETVAL, (char *) THIS->DepType());
@@ -823,10 +848,10 @@ pkgCache_DepIterator::DepType()
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_provides
 
 void
-pkgCache_PrvIterator::DESTROY()
+pkgCache_PrvIterator_p::DESTROY()
 
 char *
-pkgCache_PrvIterator::Name()
+pkgCache_PrvIterator_p::Name()
   CODE:
     RETVAL = (char *) THIS->Name();
 
@@ -834,7 +859,7 @@ pkgCache_PrvIterator::Name()
     RETVAL
 
 char *
-pkgCache_PrvIterator::ProvideVersion()
+pkgCache_PrvIterator_p::ProvideVersion()
   CODE:
     RETVAL = (char *) THIS->ProvideVersion();
 
@@ -842,33 +867,35 @@ pkgCache_PrvIterator::ProvideVersion()
     RETVAL
 
 SV *
-pkgCache_PrvIterator::OwnerVer()
+pkgCache_PrvIterator_p::OwnerVer()
   CODE:
-    pkgCache_VerIterator *v = new pkgCache_VerIterator(THIS->OwnerVer());
+    pkgCache::VerIterator i = THIS->OwnerVer();
+    pkgCache_VerIterator_p *v = new pkgCache_VerIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_version", (void *) v);
 
   OUTPUT:
     RETVAL
 
 SV *
-pkgCache_PrvIterator::OwnerPkg()
+pkgCache_PrvIterator_p::OwnerPkg()
   CODE:
-    pkgCache_PkgIterator *p = new pkgCache_PkgIterator(THIS->OwnerPkg());
+    pkgCache::PkgIterator i = THIS->OwnerPkg();
+    pkgCache_PkgIterator_p *p = new pkgCache_PkgIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_package", (void *) p);
 
   OUTPUT:
     RETVAL
 
 unsigned long
-pkgCache_PrvIterator::Index()
+pkgCache_PrvIterator_p::Index()
 
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_pkg_file
 
 void
-pkgCache_PkgFileIterator::DESTROY()
+pkgCache_PkgFileIterator_p::DESTROY()
 
 char *
-pkgCache_PkgFileIterator::FileName()
+pkgCache_PkgFileIterator_p::FileName()
   CODE:
     RETVAL = (char *) THIS->FileName();
 
@@ -876,7 +903,7 @@ pkgCache_PkgFileIterator::FileName()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Archive()
+pkgCache_PkgFileIterator_p::Archive()
   CODE:
     RETVAL = (char *) THIS->Archive();
 
@@ -884,7 +911,7 @@ pkgCache_PkgFileIterator::Archive()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Component()
+pkgCache_PkgFileIterator_p::Component()
   CODE:
     RETVAL = (char *) THIS->Component();
 
@@ -892,7 +919,7 @@ pkgCache_PkgFileIterator::Component()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Version()
+pkgCache_PkgFileIterator_p::Version()
   CODE:
     RETVAL = (char *) THIS->Version();
 
@@ -900,7 +927,7 @@ pkgCache_PkgFileIterator::Version()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Origin()
+pkgCache_PkgFileIterator_p::Origin()
   CODE:
     RETVAL = (char *) THIS->Origin();
 
@@ -908,7 +935,7 @@ pkgCache_PkgFileIterator::Origin()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Label()
+pkgCache_PkgFileIterator_p::Label()
   CODE:
     RETVAL = (char *) THIS->Label();
 
@@ -916,7 +943,7 @@ pkgCache_PkgFileIterator::Label()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Site()
+pkgCache_PkgFileIterator_p::Site()
   CODE:
     RETVAL = (char *) THIS->Site();
 
@@ -924,7 +951,7 @@ pkgCache_PkgFileIterator::Site()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::Architecture()
+pkgCache_PkgFileIterator_p::Architecture()
   CODE:
     RETVAL = (char *) THIS->Architecture();
 
@@ -932,7 +959,7 @@ pkgCache_PkgFileIterator::Architecture()
     RETVAL
 
 char *
-pkgCache_PkgFileIterator::IndexType()
+pkgCache_PkgFileIterator_p::IndexType()
   CODE:
     RETVAL = (char *) THIS->IndexType();
 
@@ -940,10 +967,10 @@ pkgCache_PkgFileIterator::IndexType()
     RETVAL
 
 unsigned long
-pkgCache_PkgFileIterator::Index()
+pkgCache_PkgFileIterator_p::Index()
 
 bool
-pkgCache_PkgFileIterator::IsOk()
+pkgCache_PkgFileIterator_p::IsOk()
   CODE:
     RETVAL = (char *) THIS->IsOk();
 
@@ -953,22 +980,23 @@ pkgCache_PkgFileIterator::IsOk()
 MODULE = AptPkg  PACKAGE = AptPkg::Cache::_ver_file
 
 void
-pkgCache_VerFileIterator::DESTROY()
+pkgCache_VerFileIterator_p::DESTROY()
 
 SV *
-pkgCache_VerFileIterator::File()
+pkgCache_VerFileIterator_p::File()
   CODE:
-    pkgCache_PkgFileIterator *p = new pkgCache_PkgFileIterator(THIS->File());
+    pkgCache::PkgFileIterator i = THIS->File();
+    pkgCache_PkgFileIterator_p *p = new pkgCache_PkgFileIterator_p(THIS_sv, i);
     RETVAL = sv_setref_pv(NEWSV(0, 0), "AptPkg::Cache::_pkg_file", (void *) p);
 
   OUTPUT:
     RETVAL
 
 unsigned long
-pkgCache_VerFileIterator::Index()
+pkgCache_VerFileIterator_p::Index()
 
 off_t
-pkgCache_VerFileIterator::Offset()
+pkgCache_VerFileIterator_p::Offset()
   CODE:
     RETVAL = (*THIS)->Offset;
 
@@ -976,7 +1004,7 @@ pkgCache_VerFileIterator::Offset()
     RETVAL
 
 unsigned short
-pkgCache_VerFileIterator::Size()
+pkgCache_VerFileIterator_p::Size()
   CODE:
     RETVAL = (*THIS)->Size;
 
@@ -986,11 +1014,16 @@ pkgCache_VerFileIterator::Size()
 MODULE = AptPkg  PACKAGE = AptPkg::_pkg_records
 
 void
-pkgRecords::DESTROY()
+pkgRecords_p::DESTROY()
 
 SV *
-pkgRecords::Lookup(pack)
-    pkgCache_VerFileIterator *pack
+pkgRecords_p::cache()
+  PPCODE:
+    XPUSHs(sv_mortalcopy(THIS->parent_sv));
+
+SV *
+pkgRecords_p::Lookup(pack)
+    pkgCache_VerFileIterator_p *pack
   PPCODE:
     pkgRecords::Parser &p = THIS->Lookup(*pack);
 

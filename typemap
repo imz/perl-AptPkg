@@ -9,13 +9,13 @@ Configuration_Item const *	T_CONFIG_ITEM
 pkgSystem *			T_PKG_SYSTEM
 pkgVersioningSystem *		T_PKG_VER_SYSTEM
 pkgCacheFile *			T_PKG_CACHE_FILE
-pkgCache_PkgIterator *		T_PKG_CACHE_PKG_ITERATOR
-pkgCache_VerIterator *		T_PKG_CACHE_VER_ITERATOR
-pkgCache_DepIterator *		T_PKG_CACHE_DEP_ITERATOR
-pkgCache_PrvIterator *		T_PKG_CACHE_PRV_ITERATOR
-pkgCache_PkgFileIterator *	T_PKG_CACHE_PKG_FILE_ITERATOR
-pkgCache_VerFileIterator *	T_PKG_CACHE_VER_FILE_ITERATOR
-pkgRecords *			T_PKG_RECORDS
+pkgCache_PkgIterator_p *	T_PKG_CACHE_PKG_ITERATOR
+pkgCache_VerIterator_p *	T_PKG_CACHE_VER_ITERATOR
+pkgCache_DepIterator_p *	T_PKG_CACHE_DEP_ITERATOR
+pkgCache_PrvIterator_p *	T_PKG_CACHE_PRV_ITERATOR
+pkgCache_PkgFileIterator_p *	T_PKG_CACHE_PKG_FILE_ITERATOR
+pkgCache_VerFileIterator_p *	T_PKG_CACHE_VER_FILE_ITERATOR
+pkgRecords_p *			T_PKG_RECORDS
 pkgSourceList *			T_PKG_SOURCE_LIST
 pkgSrcRecords *			T_PKG_SRC_RECORDS
 
