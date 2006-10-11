@@ -9,8 +9,8 @@ Group: Development/Perl
 URL: http://packages.debian.org/unstable/perl/libapt-pkg-perl
 Source: libapt-pkg-perl-%version%release.tar
 
-# Added by buildreq2 on Sat Jun 17 2006
-BuildRequires: apt dpkg gcc-c++ libapt-devel perl-devel
+# Automatically added by buildreq on Wed Oct 11 2006
+BuildRequires: apt gcc-c++ libapt-devel perl-devel
 
 %description
 A Perl interface to APT's libapt-pkg which provides modules

@@ -2,8 +2,6 @@
 
 use ExtUtils::MakeMaker;
 
-my %changes = map /^([^:]*):\s+(.*)/, split /\n(?!\s)/, `dpkg-parsechangelog`;
-
 WriteMakefile(
     NAME	 => 'AptPkg',
     VERSION_FROM => 'AptPkg.pm',
@@ -13,11 +11,10 @@ WriteMakefile(
     LIBS	 => ['-lapt-pkg'],
     XSOPT	 => '-C++',
     depend	 => { Makefile => 'AptPkg.pm debian/changelog' }, # for VERSION
-    clean	 => { FILES => 't/cache/var/*.bin'
-			    . " $changes{Source}-$changes{Version}"
-			    . " $changes{Source}_$changes{Version}.*"
-			    . " $changes{Source}_$changes{Version}_*" },
+    clean	 => { FILES => 't/cache/var/*.bin' },
 );
+
+=pod
 
 sub MY::postamble
 {
@@ -36,3 +33,5 @@ deb:
 	$(RM_RF) $(DEBNAME)-$(DEBVER)
 EOT
 }
+
+=cut
