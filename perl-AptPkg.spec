@@ -28,9 +28,13 @@ cp -a /etc/apt/* t/cache/etc/
 %perl_vendor_install
 
 %files
-%doc README debian/changelog examples
-%perl_vendor_archlib/AptPkg*
-%perl_vendor_autolib/AptPkg*
+%doc	README debian/changelog examples
+	%perl_vendor_archlib/AptPkg.pm
+%dir	%perl_vendor_archlib/AptPkg
+	%perl_vendor_archlib/AptPkg/*.pm
+%doc	%perl_vendor_archlib/AptPkg/*.pod
+%dir	%perl_vendor_autolib/AptPkg
+	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
 * Sat Jun 17 2006 Alexey Tourbin <at@altlinux.ru> 0.1.20-alt1
