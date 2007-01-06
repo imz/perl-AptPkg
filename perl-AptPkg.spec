@@ -1,6 +1,6 @@
 Name: perl-AptPkg
 Version: 0.1.20
-Release: alt1
+Release: alt2
 
 Summary: Perl interface to libapt-pkg
 License: GPL
@@ -37,6 +37,9 @@ cp -a /etc/apt/* t/cache/etc/
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Sat Jan 06 2007 Alexey Tourbin <at@altlinux.ru> 0.1.20-alt2
+- rebuilt with new libapt-pkg/glibc
+
 * Sat Jun 17 2006 Alexey Tourbin <at@altlinux.ru> 0.1.20-alt1
 - 0.1.12 -> 0.1.20
 
