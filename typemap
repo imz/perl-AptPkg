@@ -16,6 +16,7 @@ pkgCache_PrvIterator_p *	T_PKG_CACHE_PRV_ITERATOR
 pkgCache_PkgFileIterator_p *	T_PKG_CACHE_PKG_FILE_ITERATOR
 pkgCache_VerFileIterator_p *	T_PKG_CACHE_VER_FILE_ITERATOR
 pkgRecords_p *			T_PKG_RECORDS
+pkgPolicy_p *			T_PKG_POLICY
 pkgSourceList *			T_PKG_SOURCE_LIST
 pkgSrcRecords *			T_PKG_SRC_RECORDS
 
@@ -65,11 +66,14 @@ T_PKG_CACHE_VER_FILE_ITERATOR
 T_PKG_RECORDS
 	sv_setref_pv($arg, "AptPkg::_pkg_records", (void *) $var);
 
+T_PKG_POLICY
+	sv_setref_pv($arg, "AptPkg::_policy", (void *) $var);
+
 T_PKG_SOURCE_LIST
-	sv_setref_pv($arg, "AptPkg::_pkg_source_list", (void *) $var);
+	sv_setref_pv($arg, "AptPkg::_source_list", (void *) $var);
 
 T_PKG_SRC_RECORDS
-	sv_setref_pv($arg, "AptPkg::_pkg_src_records", (void *) $var);
+	sv_setref_pv($arg, "AptPkg::_src_records", (void *) $var);
 
 INPUT
 T_STRING
@@ -147,14 +151,20 @@ T_PKG_RECORDS
 	else
 	    croak(\"$var is not of type AptPkg::_pkg_records\");
 
-T_PKG_SOURCE_LIST
-	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_pkg_source_list\"))
+T_PKG_POLICY
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_policy\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
-	    croak(\"$var is not of type AptPkg::_pkg_src_records\");
+	    croak(\"$var is not of type AptPkg::_policy\");
+
+T_PKG_SOURCE_LIST
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_source_list\"))
+	    $var = ($type) SvIV((SV *) SvRV($arg));
+	else
+	    croak(\"$var is not of type AptPkg::_src_list\");
 
 T_PKG_SRC_RECORDS
-	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_pkg_src_records\"))
+	if (SvROK($arg) && sv_derived_from($arg, \"AptPkg::_src_records\"))
 	    $var = ($type) SvIV((SV *) SvRV($arg));
 	else
-	    croak(\"$var is not of type AptPkg::_pkg_src_records\");
+	    croak(\"$var is not of type AptPkg::_src_records\");

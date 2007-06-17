@@ -59,15 +59,16 @@ if (my $b = $cache->{b})
     print 'not ' unless $b->{CurrentVer}{VerStr} eq '0.2-1';
     print "ok 8\n";
 
-    # installed and new versions are available
-    print 'not ' unless @{$b->{VersionList}} == 2;
+    # installed and two new versions are available
+    print 'not ' unless @{$b->{VersionList}} == 3;
     print "ok 9\n";
 
-    # new version is first
-    print 'not ' unless $b->{VersionList}[0]{VerStr} eq '0.3-1';
+    # newest version is first
+    print 'not ' unless $b->{VersionList}[0]{VerStr} eq '0.3-2';
     print "ok 10\n";
 
-    if (my $f = $b->{VersionList}[0]{FileList})
+    # stash verfile from stable version
+    if (my $f = $b->{VersionList}[1]{FileList})
     {
 	$verfile = $f->[0];
     }
@@ -78,27 +79,41 @@ if (my $b = $cache->{b})
 
     print "ok 11\n";
 
-    # followed by current version
-    print 'not ' unless $b->{VersionList}[1]{VerStr} eq '0.2-1';
+    # last is current version
+    print 'not ' unless $b->{VersionList}[-1]{VerStr} eq '0.2-1';
     print "ok 12\n";
 
     # check rev depends
-    print 'not ' unless @{$b->{RevDependsList}} == 1;
-    print "ok 13\n";
+    my $r;
+    if (@{$b->{RevDependsList}} == 2)
+    {
+	($r) = grep {
+		$_->{ParentPkg}{Name} eq 'a' and
+		$_->{ParentVer}{VerStr} eq '0.1'
+	    } @{$b->{RevDependsList}};
+    }
 
-    my $r = $b->{RevDependsList}[0];
+    if ($r)
+    {
+	print "ok 13\n";
 
-    print 'not ' unless $r->{DepType} eq 'Depends';
-    print "ok 14\n";
+	print 'not ' unless $r->{DepType} eq 'Depends';
+	print "ok 14\n";
 
-    print 'not ' unless $r->{TargetPkg}{Name} eq 'b';
-    print "ok 15\n";
+	print 'not ' unless $r->{TargetPkg}{Name} eq 'b';
+	print "ok 15\n";
 
-    print 'not ' unless $r->{CompType} eq '>=';
-    print "ok 16\n";
+	print 'not ' unless $r->{CompType} eq '>=';
+	print "ok 16\n";
 
-    print 'not ' unless $r->{TargetVer} eq '0.2-3';
-    print "ok 17\n";
+	print 'not ' unless $r->{TargetVer} eq '0.2-3';
+	print "ok 17\n";
+    }
+    else
+    {
+	print "not ok 13 # no rev depends\n";
+	print "ok $_ # skip\n" for 14..17;
+    }
 }
 else
 {
@@ -120,19 +135,19 @@ if (my $a = $cache->{a})
 	CurrentState => 'NotInstalled',
     };
 
-    # expect one version to be available
-    print 'not ' unless @{$a->{VersionList}} == 1;
+    # expect two versions to be available
+    print 'not ' unless @{$a->{VersionList}} == 2;
     print "ok 24\n";
 
-    # check version
-    print 'not ' unless $a->{VersionList}[0]{VerStr} eq '0.1';
+    # check version (stable version)
+    print 'not ' unless $a->{VersionList}[1]{VerStr} eq '0.1';
     print "ok 25\n";
 
     # check provides
-    print 'not ' unless @{$a->{VersionList}[0]{ProvidesList}} == 1;
+    print 'not ' unless @{$a->{VersionList}[1]{ProvidesList}} == 1;
     print "ok 26\n";
 
-    my $p = $a->{VersionList}[0]{ProvidesList}[0];
+    my $p = $a->{VersionList}[1]{ProvidesList}[0];
     print 'not ' unless $p->{OwnerPkg}{Name} eq 'a';
     print "ok 27\n";
 
@@ -140,7 +155,7 @@ if (my $a = $cache->{a})
     print "ok 28\n";
 
     # check depends
-    my $d = $a->{VersionList}[0]{DependsList};
+    my $d = $a->{VersionList}[1]{DependsList};
     my $depend;
     my $conflict;
 
@@ -189,14 +204,14 @@ my $f = $cache->files;
 my $status;
 my $packages;
 
-if ($f and @$f == 2)
+if ($f and @$f == 3)
 {
-    for my $i (0, 1)
+    for (my $i = 0; $i < @$f; $i++)
     {
 	for ($f->[$i]{FileName})
 	{
 	    /\bstatus$/  and $status = $i;
-	    /_Packages$/ and $packages = $i;
+	    /stable_.*_Packages$/ and $packages = $i;
 	}
     }
 }
@@ -240,9 +255,9 @@ if (my $p = $cache->packages)
 	check_keys 49, $a, {
 	    Name => 'a',
 	    Section => 'test',
-	    VerStr => '0.1',
+	    VerStr => '0.5',
 	    Maintainer => 'Brendan O\'Dea <bod@debian.org>',
-	    FileName => 'pool/main/a/a/a_0.1_i386.deb',
+	    FileName => 'pool/main/a/a/a_0.5_i386.deb',
 	    MD5Hash => '0123456789abcdef0123456789abcdef',
 	    ShortDesc => 'Test Package "a"',
 	    LongDesc => qq/Test Package "a"\n This is a bogus package for the AptPkg::Cache test suite./,

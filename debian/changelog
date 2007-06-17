@@ -1,3 +1,14 @@
+libapt-pkg-perl (0.1.21) unstable; urgency=low
+
+  * Remove obsolete _iter method from AptPkg/hash.pm .
+  * Use typemap for methods returning objects rather than calling
+    sv_setref_pv() manually.
+
+  * Tidy up parented<> class handling.
+  * Implement pkgPolicy interface as AptPkg::Policy (closes: #243125).
+
+ -- Brendan O'Dea <bod@debian.org>  Sun, 17 Jun 2007 21:57:35 +1000
+
 libapt-pkg-perl (0.1.20) unstable; urgency=low
 
   * Use $(CURDIR) [make] rather than $(PWD) [sh] in debian/rules

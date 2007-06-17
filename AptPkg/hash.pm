@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use Scalar::Util 'weaken';
 
-our $VERSION = qw$Revision: 1.5 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
 
 sub new
 {
@@ -36,7 +36,6 @@ sub new
 sub _self { (tied %{$_[0]})->[0] }
 sub _xs   { (tied %{$_[0]})->[1] }
 sub _priv { (tied %{$_[0]})->[2] }
-sub _iter { (tied %{$_[0]})->[3] }
 
 sub keys
 {
@@ -87,7 +86,7 @@ sub new
 {
     my ($class, $obj) = @_;
     my $keys = $obj->_priv;
-    my $unused = keys %$keys; # reset iterator
+    keys %$keys; # reset iterator
     bless \$obj, $class;
 }
 
@@ -139,8 +138,7 @@ invoking get/set (through FETCH/STORE).
 
 The tie associates an array reference with the hash, which initially
 contains a reference to the hash, the XS object and an anon hash
-which may be used by subclasses to store state information.  The
-fourth element is used to store the current iterator.
+which may be used by subclasses to store state information.
 
 If no XS object is passed, one is created via new in the XS class. 
 The name of that class is constructed from the class name, by
@@ -151,9 +149,9 @@ If the module contains a @KEYS array, then the private hash will be
 populated with those entries as keys (see the description below of the
 AptPkg::hash::method class).
 
-=item _self, _xs, _priv, _iter
+=item _self, _xs, _priv
 
-Accessors which may be used in subclass methods to fetch the four
+Accessors which may be used in subclass methods to fetch the three
 array elements associated with the hash reference.
 
 =item keys(I<ARGS>)

@@ -12,13 +12,13 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.3 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.4 $[1] || 0.1;
 
 sub new
 {
     my $class = shift;
-    my $srclist = AptPkg::_pkg_source_list->new(@_);
-    my $xs = AptPkg::_pkg_src_records->new($srclist);
+    my $srclist = AptPkg::_source_list->new(@_);
+    my $xs = AptPkg::_src_records->new($srclist);
     my $self = $class->SUPER::new($xs);
     $self->_priv->{srclist} = $srclist;
     $self;

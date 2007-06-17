@@ -24,6 +24,7 @@ $_config->{quiet} = 2;
 
 # set up the cache
 my $cache = AptPkg::Cache->new;
+my $policy = $cache->policy;
 
 die "Usage: $self PACKAGE ...\n" unless @ARGV;
 
@@ -43,6 +44,17 @@ for my $pack (@ARGV)
     }
 
     print "CurrentVer: $p->{CurrentVer}{VerStr}\n" if $p->{CurrentVer};
+    if (my $c = $policy->candidate($p))
+    {
+	print "CandidateVer: ", $c->{VerStr}, "\n";
+    }
+
+    my $prio = $policy->priority($p);
+    my $pin_ver;
+    if ($prio and my $v = $policy->match($p))
+    {
+	$pin_ver = $v->{VerStr};
+    }
 
     if (my $available = $p->{VersionList})
     {
@@ -50,9 +62,14 @@ for my $pack (@ARGV)
 	my $i = 0;
 	for my $v (@$available)
 	{
-	    print "  [$i] $v->{VerStr} (",
-		(join ', ', map $_->{File}{FileName}, @{$v->{FileList}}),
-		")\n";
+	    print "  [$i] $v->{VerStr}";
+	    print " (prio $prio)" if $prio and $pin_ver eq $v->{VerStr};
+	    print "\n";
+	    for my $f (map $_->{File}, @{$v->{FileList}})
+	    {
+		printf "    * %s (prio %d)\n", $f->{FileName},
+		    $policy->priority($f);
+	    }
 
 	    print "      Priority: $v->{Priority}\n";
 

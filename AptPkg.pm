@@ -9,7 +9,7 @@ use warnings;
 require DynaLoader;
 
 our @ISA = qw(DynaLoader);
-our $VERSION = qw$Revision: 1.11 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.12 $[1] || 0.1;
 
 bootstrap AptPkg $VERSION;
 
@@ -30,8 +30,8 @@ use AptPkg;
 The AptPkg module provides a low-level XS interface to libapt-pkg.
 
 Note that this interface is intended to be internal, and may change,
-see the AptPkg::Config, AptPkg::System, AptPkg::Version, AptPkg::Cache
-and AptPkg::Source classes for a higher level interface.
+see the AptPkg::Config, AptPkg::System, AptPkg::Version, AptPkg::Cache,
+Apt::Policy and AptPkg::Source classes for a higher level interface.
 
 =head2 AptPkg
 
@@ -99,7 +99,7 @@ pkgVersioningSystem class.  It exposes the following methods:
 The AptPkg::_cache package wraps a Perl class around the pkgCacheFile
 class.  It exposes the following methods:
 
-    Open, Close, FindPkg, PkgBegin, FileList and Packages.
+    Open, Close, FindPkg, PkgBegin, FileList, Packages and Policy.
 
 =head2 AptPkg::Cache::_package
 
@@ -155,15 +155,22 @@ pkgRecords class.  It exposes the following methods:
 
     Lookup.
 
-=head2 AptPkg::_pkg_source_list
+=head2 AptPkg::_policy
 
-The AptPkg::Cache::_pkg_source_list package wraps a Perl class around
+The AptPkg::_policy package wraps a Perl class around the pkgPolicy
+class.  It exposes the following methods:
+
+    GetPriority, GetMatch and GetCandidateVer.
+
+=head2 AptPkg::_source_list
+
+The AptPkg::_source_list package wraps a Perl class around
 the pkgSourceList class.  Required as an argument to the
-AptPkg::_pkg_src_records constructor.
+AptPkg::_src_records constructor.
 
-=head2 AptPkg::_pkg_src_records
+=head2 AptPkg::_src_records
 
-The AptPkg::Cache::_pkg_src_records package wraps a Perl class around
+The AptPkg::_src_records package wraps a Perl class around
 the pkgSrcRecords class.  It exposes the following methods:
 
     Restart, Find.
