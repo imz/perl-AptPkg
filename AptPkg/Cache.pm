@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.22 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.23 $[1] || 0.1;
 
 sub new
 {
@@ -369,7 +369,7 @@ version.
 =item DependsList
 
 A reference to an array of AptPkg::Cache::Depends objects describing
-packages which depend upon the current package.
+packages which the current package depends upon.
 
 =item ProvidesList
 

@@ -1,3 +1,9 @@
+libapt-pkg-perl (0.1.22) unstable; urgency=low
+
+  * Fix typo in AptPkg::Cache::Version DependsList docs (closes: #461553).
+
+ -- Brendan O'Dea <bod@debian.org>  Wed, 06 Feb 2008 00:56:42 +1100
+
 libapt-pkg-perl (0.1.21) unstable; urgency=low
 
   * Remove obsolete _iter method from AptPkg/hash.pm .
