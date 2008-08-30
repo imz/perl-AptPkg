@@ -14,7 +14,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw();
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.7 $[1] || 0.1;
 
 sub label       { shift->Label(@_) }
 sub compare     { shift->CmpVersion(@_) }
@@ -67,7 +67,7 @@ The AptPkg::Version package implements the B<APT> pkgVersioningSystem
 class.
 
 An instance of the AptPkg::Version class may be fetched using the
-versioning method from AptPkg::System.
+C<versioning> method from an AptPkg::System object.
 
 The following methods are implemented:
 

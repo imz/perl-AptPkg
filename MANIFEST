@@ -3,6 +3,8 @@ AptPkg.xs
 AptPkg/Cache.pm
 AptPkg/Config.pm
 AptPkg/Config.pod
+AptPkg/PkgRecords.pm
+AptPkg/Policy.pm
 AptPkg/Source.pm
 AptPkg/System.pm
 AptPkg/Version.pm
@@ -26,11 +28,15 @@ t/03_cache.t
 t/04_source.t
 t/05_autoinit.t
 t/cache/etc/apt.conf
+t/cache/etc/preferences
 t/cache/etc/sources.list
 t/cache/var/lists/_test_dists_stable_Release
 t/cache/var/lists/_test_dists_stable_Release.gpg
 t/cache/var/lists/_test_dists_stable_main_binary-i386_Packages
 t/cache/var/lists/_test_dists_stable_main_source_Sources
+t/cache/var/lists/_test_dists_testing_Release
+t/cache/var/lists/_test_dists_testing_Release.gpg
+t/cache/var/lists/_test_dists_testing_main_binary-i386_Packages
 t/cache/var/status
 t/config.conf
 typemap

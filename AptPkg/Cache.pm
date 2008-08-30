@@ -12,7 +12,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.21 $[1] || 0.1;
+our $VERSION = qw$Revision: 1.23 $[1] || 0.1;
 
 sub new
 {
@@ -34,8 +34,19 @@ sub files
 sub packages
 {
     my $self = shift;
-    $self->_priv->{packages} ||=
+    $self->_priv->{packages} ||= do {
+	require AptPkg::PkgRecords;
 	bless \$self->_xs->Packages, 'AptPkg::PkgRecords';
+    };
+}
+
+sub policy
+{
+    my $self = shift;
+    $self->_priv->{policy} ||= do {
+	require AptPkg::Policy;
+	bless \$self->_xs->Policy, 'AptPkg::Policy';
+    };
 }
 
 sub exists { shift->_xs->FindPkg(@_) }
@@ -192,30 +203,6 @@ sub File { AptPkg::Cache::_make_class shift, 'AptPkg::Cache::PkgFile' }
 
 package AptPkg::Cache::VerFile::Iter;
 our @ISA = qw(AptPkg::hash::method::iter);
-
-package AptPkg::PkgRecords;
-
-sub lookup
-{
-    my ($self, $pack) = @_;
-    my $xs = $$self;
-    my %extra;
-    unless (ref $pack)
-    {
-	my $p = do {
-	    my $_p = $xs->cache->FindPkg($pack)	or return;
-	    AptPkg::Cache::Package->new($_p);
-	};
-
-	my $v = ($p->{VersionList} || [])->[0]	or return;
-	$pack = ($v->{FileList}    || [])->[0]	or return;
-	$extra{$_} = $v->{$_} for qw/Section VerStr/;
-    }
-
-    my @r = $xs->Lookup($pack->_xs) or return;
-    push @r, %extra;
-    wantarray ? @r : { @r };
-}
 
 1;
 
@@ -382,7 +369,7 @@ version.
 =item DependsList
 
 A reference to an array of AptPkg::Cache::Depends objects describing
-packages which depend upon the current package.
+packages which the current package depends upon.
 
 =item ProvidesList
 
@@ -559,46 +546,10 @@ Internal B<APT> unique reference for the package file record.
 
 =back
 
-=head2 AptPkg::PkgRecords
-
-Implements the B<APT> pkgRecords class.
-
-=head3 Methods
-
-=over 4
-
-=item lookup(I<PACK>)
-
-Return a hash (or hash reference, depending on context) for the given
-package.
-
-I<PACK> may either be an AptPkg::Cache::VerFile object, or a package
-name.
-
-The hash contains the following keys:
-
-=over 4
-
-C<FileName>, C<MD5Hash>, C<SourcePkg>, C<Maintainer>, C<ShortDesc>,
-C<LongDesc> and C<Name>.
-
-=back
-
-with values taken from the packages file.  If I<PACK> is a package
-name, these additional values are set:
-
-=over 4
-
-C<Section> and C<VerStr>.
-
-=back
-
-=back
-
 =head1 SEE ALSO
 
 AptPkg::Config(3pm), AptPkg::System(3pm), AptPkg(3pm),
-AptPkg::hash(3pm).
+AptPkg::hash(3pm), AptPkg::PkgRecords(3pm), AptPkg::Policy(3pm).
 
 =head1 AUTHOR
 
