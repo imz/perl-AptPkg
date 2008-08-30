@@ -1,15 +1,16 @@
 Name: perl-AptPkg
-Version: 0.1.20
-Release: alt2
+Version: 0.1.22
+Release: alt1
 
 Summary: Perl interface to libapt-pkg
 License: GPL
 Group: Development/Perl
 
 URL: http://packages.debian.org/unstable/perl/libapt-pkg-perl
-Source: libapt-pkg-perl-%version%release.tar
+Source: libapt-pkg-perl-%version.tar
+Patch: %name-%version-%release.patch
 
-# Automatically added by buildreq on Wed Oct 11 2006
+# Automatically added by buildreq on Sat Aug 30 2008
 BuildRequires: apt gcc-c++ libapt-devel perl-devel
 
 %description
@@ -18,7 +19,8 @@ for configuration file/command line parsing, version comparison,
 inspection of the binary package cache and source package details.
 
 %prep
-%setup -q -n libapt-pkg-perl-%version%release
+%setup -q -n libapt-pkg-perl-%version
+%patch -p1
 cp -a /etc/apt/* t/cache/etc/
 
 %build
@@ -37,6 +39,9 @@ cp -a /etc/apt/* t/cache/etc/
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Sat Aug 30 2008 Alexey Tourbin <at@altlinux.ru> 0.1.22-alt1
+- 0.1.20 -> 0.1.22
+
 * Sat Jan 06 2007 Alexey Tourbin <at@altlinux.ru> 0.1.20-alt2
 - rebuilt with new libapt-pkg/glibc
 
