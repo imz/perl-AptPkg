@@ -505,7 +505,7 @@ SV *
 pkgCacheFile::FileList()
   PPCODE:
     pkgCache *cache = *THIS;
-    for (pkgCache::PkgFileIterator i = cache->FileBegin(); !i.end(); i++)
+    for (pkgCache::PkgFileIterator i = cache->FileBegin(); !i.end(); ++i)
     {
 	pkgCache_PkgFileIterator_p *f =
 	    new pkgCache_PkgFileIterator_p(THIS_sv, i);
@@ -569,7 +569,7 @@ pkgCache_PkgIterator_p::Section()
 SV *
 pkgCache_PkgIterator_p::VersionList()
   PPCODE:
-    for (pkgCache::VerIterator i = THIS->obj->VersionList(); !i.end(); i++)
+    for (pkgCache::VerIterator i = THIS->obj->VersionList(); !i.end(); ++i)
     {
 	pkgCache_VerIterator_p *v = new pkgCache_VerIterator_p(THIS_sv, i);
 	SV *ver = sv_newmortal();
@@ -592,7 +592,7 @@ pkgCache_PkgIterator_p::CurrentVer()
 SV *
 pkgCache_PkgIterator_p::RevDependsList()
   PPCODE:
-    for (pkgCache::DepIterator i = THIS->obj->RevDependsList(); !i.end(); i++)
+    for (pkgCache::DepIterator i = THIS->obj->RevDependsList(); !i.end(); ++i)
     {
 	pkgCache_DepIterator_p *d = new pkgCache_DepIterator_p(THIS_sv, i);
 	SV *dep = sv_newmortal();
@@ -603,7 +603,7 @@ pkgCache_PkgIterator_p::RevDependsList()
 SV *
 pkgCache_PkgIterator_p::ProvidesList()
   PPCODE:
-    for (pkgCache::PrvIterator i = THIS->obj->ProvidesList(); !i.end(); i++)
+    for (pkgCache::PrvIterator i = THIS->obj->ProvidesList(); !i.end(); ++i)
     {
 	pkgCache_PrvIterator_p *p = new pkgCache_PrvIterator_p(THIS_sv, i);
 	SV *prv = sv_newmortal();
@@ -622,7 +622,7 @@ pkgCache_PkgIterator_p::Index()
 SV *
 pkgCache_PkgIterator_p::SelectedState()
   PREINIT:
-    char *rv;
+    char const *rv;
 
   CODE:
     switch ((*THIS->obj)->SelectedState)
@@ -645,7 +645,7 @@ pkgCache_PkgIterator_p::SelectedState()
 SV *
 pkgCache_PkgIterator_p::InstState()
   PREINIT:
-    char *rv;
+    char const *rv;
 
   CODE:
     switch ((*THIS->obj)->InstState)
@@ -667,7 +667,7 @@ pkgCache_PkgIterator_p::InstState()
 SV *
 pkgCache_PkgIterator_p::CurrentState()
   PREINIT:
-    char *rv;
+    char const *rv;
 
   CODE:
     switch ((*THIS->obj)->CurrentState)
@@ -755,7 +755,7 @@ pkgCache_VerIterator_p::ParentPkg()
 SV *
 pkgCache_VerIterator_p::DependsList()
   PPCODE:
-    for (pkgCache::DepIterator i = THIS->obj->DependsList(); !i.end(); i++)
+    for (pkgCache::DepIterator i = THIS->obj->DependsList(); !i.end(); ++i)
     {
 	pkgCache_DepIterator_p *d = new pkgCache_DepIterator_p(THIS_sv, i);
 	SV *dep = sv_newmortal();
@@ -766,7 +766,7 @@ pkgCache_VerIterator_p::DependsList()
 SV *
 pkgCache_VerIterator_p::ProvidesList()
   PPCODE:
-    for (pkgCache::PrvIterator i = THIS->obj->ProvidesList(); !i.end(); i++)
+    for (pkgCache::PrvIterator i = THIS->obj->ProvidesList(); !i.end(); ++i)
     {
 	pkgCache_PrvIterator_p *p = new pkgCache_PrvIterator_p(THIS_sv, i);
 	SV *prv = sv_newmortal();
@@ -777,7 +777,7 @@ pkgCache_VerIterator_p::ProvidesList()
 SV *
 pkgCache_VerIterator_p::FileList()
   PPCODE:
-    for (pkgCache::VerFileIterator i = THIS->obj->FileList(); !i.end(); i++)
+    for (pkgCache::VerFileIterator i = THIS->obj->FileList(); !i.end(); ++i)
     {
 	pkgCache_VerFileIterator_p *f =
 	    new pkgCache_VerFileIterator_p(THIS_sv, i);
@@ -786,6 +786,22 @@ pkgCache_VerIterator_p::FileList()
 	sv_setref_pv(file, "AptPkg::Cache::_ver_file", (void *) f);
 	XPUSHs(file);
     }
+
+unsigned long
+pkgCache_VerIterator_p::InstalledSize()
+  CODE:
+    RETVAL = (*THIS->obj)->InstalledSize;
+
+  OUTPUT:
+    RETVAL
+
+unsigned long
+pkgCache_VerIterator_p::Size()
+  CODE:
+    RETVAL = (*THIS->obj)->Size;
+
+  OUTPUT:
+    RETVAL
 
 unsigned long
 pkgCache_VerIterator_p::Index()
@@ -1235,7 +1251,7 @@ pkgSrcRecords::Find(src, src_only = false)
     {
 	HV *hv = newHV();
 	for (vector<pkgSrcRecords::Parser::BuildDepRec>::const_iterator b =
-	    bd.begin(); b != bd.end(); b++)
+	    bd.begin(); b != bd.end(); ++b)
 	{
 	    char const *key = parser->BuildDepType(b->Type);
 	    STRLEN klen = strlen(key);
@@ -1290,7 +1306,7 @@ pkgSrcRecords::Find(src, src_only = false)
     {
 	AV *av = newAV();
 	for (vector<pkgSrcRecords::File>::const_iterator f = files.begin();
-	    f != files.end(); f++)
+	    f != files.end(); ++f)
 	{
 	    HV *hv = newHV();
 

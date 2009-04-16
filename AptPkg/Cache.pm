@@ -131,7 +131,7 @@ package AptPkg::Cache::Version;
 our @ISA = qw(AptPkg::hash::method);
 our @KEYS = qw(
     VerStr Section Arch ParentPkg DependsList ProvidesList FileList
-    Index Priority
+    InstalledSize Size Index Priority
 );
 
 sub ParentPkg
@@ -380,6 +380,14 @@ virtual packages provided by this version.
 
 A reference to an array of AptPkg::Cache::VerFile objects describing
 the packages files which include the current version.
+
+=item Size
+
+The F<.deb> file size, in bytes.
+
+=item InstalledSize
+
+The disk space used when installed, in bytes.
 
 =item Index
 
