@@ -27,6 +27,7 @@ t/02_version.t
 t/03_cache.t
 t/04_source.t
 t/05_autoinit.t
+t/06_policy.t
 t/cache/etc/apt.conf
 t/cache/etc/preferences
 t/cache/etc/sources.list

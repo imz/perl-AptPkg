@@ -3,7 +3,9 @@ Section: perl
 Priority: optional
 Maintainer: Brendan O'Dea <bod@debian.org>
 Build-Depends: perl (>= 5.8.0-6), debhelper (>> 3.0.18), libapt-pkg-dev (>= 0.6.40.1)
-Standards-Version: 3.6.2
+Standards-Version: 3.8.1
+Vcs-Git: git://git.debian.org/users/bod/libapt-pkg-perl.git
+Vcs-Browser: http://git.debian.org/?p=users/bod/libapt-pkg-perl.git
 
 Package: libapt-pkg-perl
 Architecture: any
