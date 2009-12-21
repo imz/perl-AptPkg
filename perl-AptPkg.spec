@@ -1,6 +1,6 @@
 Name: perl-AptPkg
 Version: 0.1.24
-Release: alt1
+Release: alt1.1
 
 Summary: Perl interface to libapt-pkg
 License: GPL
@@ -39,6 +39,11 @@ cp -a /etc/apt/* t/cache/etc/
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Mon Dec 21 2009 Alexey I. Froloff <raorn@altlinux.org> 0.1.24-alt1.1
+- NMU:
+  + rebuilt with apt 0.5.15lorg2-alt31.1
+  + AptPkg::PkgRecords::lookup(): also return raw changelog text
+
 * Fri Nov 27 2009 Alexey Tourbin <at@altlinux.ru> 0.1.24-alt1
 - 0.1.22 -> 0.1.24
 
