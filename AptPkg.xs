@@ -1107,6 +1107,7 @@ pkgRecords_p::Lookup(pack)
 
     PUSH_PAIR(FileName)
     PUSH_PAIR(MD5Hash)
+    PUSH_PAIR(Changelog)
     PUSH_PAIR(SourcePkg)
     PUSH_PAIR(Maintainer)
     PUSH_PAIR(ShortDesc)

@@ -71,8 +71,8 @@ The hash contains the following keys:
 
 =over 4
 
-C<FileName>, C<MD5Hash>, C<SourcePkg>, C<Maintainer>, C<ShortDesc>,
-C<LongDesc> and C<Name>.
+C<FileName>, C<MD5Hash>, C<Changelog>, C<SourcePkg>, C<Maintainer>,
+C<ShortDesc>, C<LongDesc> and C<Name>.
 
 =back
 
