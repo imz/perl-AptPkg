@@ -1,6 +1,6 @@
 package AptPkg;
 
-# $Id$
+# $Id: AptPkg.pm,v 1.12 2007-06-17 12:08:59 bod Exp $
 
 require 5.005_62;
 use strict;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# $Id$
+# $Id: apt-cache,v 1.3 2007-06-17 12:09:00 bod Exp $
 #
 # Example: demonstrate accessing the package cache
 #
@@ -19,7 +19,7 @@ use AptPkg::Cache;
 $_config->init;
 $_system = $_config->system;
 
-# supress cache building messages
+# suppress cache building messages
 $_config->{quiet} = 2;
 
 # set up the cache

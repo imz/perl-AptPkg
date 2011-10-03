@@ -1,6 +1,6 @@
 package AptPkg::Source;
 
-# $Id$
+# $Id: Source.pm,v 1.4 2007-06-17 12:09:00 bod Exp $
 
 require 5.005_62;
 use strict;

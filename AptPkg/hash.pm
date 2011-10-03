@@ -1,6 +1,6 @@
 package AptPkg::hash;
 
-# $Id$
+# $Id: hash.pm,v 1.6 2007-06-13 13:46:19 bod Exp $
 
 require 5.005_62;
 use strict;

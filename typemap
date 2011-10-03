@@ -1,4 +1,4 @@
-# $Id$
+# $Id: typemap,v 1.12 2007-06-17 12:08:59 bod Exp $
 
 TYPEMAP
 off_t				T_UV

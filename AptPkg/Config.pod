@@ -1,4 +1,4 @@
-# $Id$
+# $Id: Config.pod,v 1.5 2002-07-28 23:01:39 bod Exp $
 
 #
 # This is not in Config.pm as MakeMaker can't be convinced to build a
@@ -38,7 +38,7 @@ Fetch the value of I<KEY> from the configuration object, returning
 undef if not found (or I<DEFAULT> if given).
 
 If the key ends in ::, an array of values is returned in an array
-context, or a string containing the values seperated by spaces in a
+context, or a string containing the values separated by spaces in a
 scalar context.
 
 A trailing /f, /d, /b or /i causes file, directory, boolean or integer
@@ -112,7 +112,7 @@ if it exists.
 
 =item system
 
-Return the AptPkg::System object apropriate for this system.
+Return the AptPkg::System object appropriate for this system.
 
 =item parse_cmdline(I<DEFS>, [I<ARG>, ...])
 
@@ -134,7 +134,7 @@ Valid argument types are defined by the strings:
     Boolean	true/false (-d, -d=true, -d=yes, --no-d, -d=false, etc)
     InvBoolean	same as Boolean but false with no specified sense (-d)
     ConfigFile	load the specified configuration file
-    ArbItem	arbitary configuration string of the form key=value
+    ArbItem	arbitrary configuration string of the form key=value
 
 The configuration key in the last two cases is ignored, and for the
 rest gives the key into which the value is placed.

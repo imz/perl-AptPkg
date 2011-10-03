@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id$
+# $Id: 03_cache.t,v 1.2 2007-06-17 12:09:00 bod Exp $
 # AptPkg::Cache tests
 
 BEGIN { print "1..63\n" }

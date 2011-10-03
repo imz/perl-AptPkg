@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: AptPkg.xs,v 1.28 2007-06-17 12:08:59 bod Exp $ */
 
 /*
  * perl interface to libapt-pkg
