@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id$
+# $Id: 02_version.t,v 1.1 2003-06-09 12:26:56 bod Exp $
 # AptPkg::Version tests
 
 BEGIN { print "1..21\n" }

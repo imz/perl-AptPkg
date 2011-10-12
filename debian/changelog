@@ -1,3 +1,19 @@
+libapt-pkg-perl (0.1.25) unstable; urgency=low
+
+  * Update Vcs-Git and Vcs-Browser fields.
+  * Update standards-version to 3.9.2:
+    - switch to debhelper v8, adding debian/compat
+    - use dh_prep rather than dh_clean -k
+    - add ${misc:Depends}
+    - add build-arch and build-indep targets
+    - conditionally "make realclean" rather than supressing errors
+    - use DESTDIR, rather than PREFIX in install rules
+    - switch to "3.0 (Native)" source format
+  * Apply patch from Kevin Lyda to fix a number of misspellings in the
+    comments and documentation.
+
+ -- Brendan O'Dea <bod@debian.org>  Mon, 03 Oct 2011 21:05:12 +1100
+
 libapt-pkg-perl (0.1.24) unstable; urgency=low
 
   * Fix Vcs-Browser control field.

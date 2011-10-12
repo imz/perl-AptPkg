@@ -1,6 +1,6 @@
 package AptPkg::Config;
 
-# $Id$
+# $Id: Config.pm,v 1.7 2005-08-07 14:03:02 bod Exp $
 
 require 5.005_62;
 use strict;

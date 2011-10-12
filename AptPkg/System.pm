@@ -1,6 +1,6 @@
 package AptPkg::System;
 
-# $Id$
+# $Id: System.pm,v 1.4 2005-08-07 14:03:02 bod Exp $
 
 require 5.005_62;
 use strict;

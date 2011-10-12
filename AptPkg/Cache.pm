@@ -1,6 +1,6 @@
 package AptPkg::Cache;
 
-# $Id$
+# $Id: Cache.pm,v 1.23 2008-02-05 13:57:58 bod Exp $
 
 require 5.005_62;
 use strict;
@@ -263,7 +263,7 @@ files.
 =item packages
 
 Return an AptPkg::PkgRecords object which may be used to retrieve
-additional infomation about packages.
+additional information about packages.
 
 =item get, exists, keys
 
@@ -328,7 +328,7 @@ current package.
 
 =item Flags
 
-A comma seperated list if flags:  C<Auto>, C<Essential> or
+A comma separated list if flags:  C<Auto>, C<Essential> or
 C<Important>.
 
 In a numeric context, evaluates to a combination of AptPkg::Flag:: 

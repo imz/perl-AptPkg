@@ -1,6 +1,6 @@
 Name: perl-AptPkg
-Version: 0.1.24
-Release: alt1.1.1
+Version: 0.1.25
+Release: alt1
 
 Summary: Perl interface to libapt-pkg
 License: GPL
@@ -10,7 +10,7 @@ URL: http://packages.debian.org/unstable/perl/libapt-pkg-perl
 Source: libapt-pkg-perl-%version.tar
 Patch: %name-%version-%release.patch
 
-# Automatically added by buildreq on Fri Nov 27 2009
+# Automatically added by buildreq on Wed Oct 12 2011
 BuildRequires: apt gcc-c++ libapt-devel perl-devel
 
 %description
@@ -39,6 +39,10 @@ cp -a /etc/apt/* t/cache/etc/
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Wed Oct 12 2011 Alexey Tourbin <at@altlinux.ru> 0.1.25-alt1
+- 0.1.24 -> 0.1.25
+- built for perl-5.14
+
 * Fri Nov 05 2010 Vladimir Lettiev <crux@altlinux.ru> 0.1.24-alt1.1.1
 - rebuilt with perl 5.12
 

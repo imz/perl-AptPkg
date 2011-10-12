@@ -1,6 +1,6 @@
 package AptPkg::Version;
 
-# $Id$
+# $Id: Version.pm,v 1.7 2007-06-17 12:09:00 bod Exp $
 
 require 5.005_62;
 use strict;
