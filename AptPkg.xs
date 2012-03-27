@@ -1,5 +1,3 @@
-/* $Id: AptPkg.xs,v 1.28 2007-06-17 12:08:59 bod Exp $ */
-
 /*
  * perl interface to libapt-pkg
  */
@@ -466,7 +464,7 @@ pkgCacheFile::Open(lock = false)
     OpTextProgress progress(*_config);
 
   C_ARGS:
-    progress, lock
+    &progress, lock
 
   POSTCALL:
     handle_errors(0);
@@ -1006,14 +1004,6 @@ char *
 pkgCache_PkgFileIterator_p::Site()
   CODE:
     RETVAL = (char *) THIS->obj->Site();
-
-  OUTPUT:
-    RETVAL
-
-char *
-pkgCache_PkgFileIterator_p::Architecture()
-  CODE:
-    RETVAL = (char *) THIS->obj->Architecture();
 
   OUTPUT:
     RETVAL

@@ -1,7 +1,5 @@
 package AptPkg::Cache;
 
-# $Id: Cache.pm,v 1.23 2008-02-05 13:57:58 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
@@ -12,7 +10,7 @@ require Exporter;
 
 our @ISA = qw(Exporter AptPkg::hash);
 our @EXPORT = ();
-our $VERSION = qw$Revision: 1.23 $[1] || 0.1;
+our $VERSION = 1.23;
 
 sub new
 {
@@ -187,8 +185,7 @@ package AptPkg::Cache::PkgFile;
 
 our @ISA = qw(AptPkg::hash::method);
 our @KEYS = qw(
-    FileName Archive Component Version Origin Label Site Architecture
-    Index IndexType IsOk
+    FileName Archive Component Version Origin Label Site Index IndexType IsOk
 );
 
 package AptPkg::Cache::PkgFile::Iter;
@@ -525,10 +522,6 @@ Packages file path.
 =item IndexType
 
 File type: C<Debian Package Index>, C<Debian dpkg status file>.
-
-=item Architecture
-
-Architecture.
 
 =item Archive
 

@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 
-# $Id: 03_cache.t,v 1.2 2007-06-17 12:09:00 bod Exp $
 # AptPkg::Cache tests
 
-BEGIN { print "1..63\n" }
+BEGIN { print "1..62\n" }
 
 sub check_keys
 {
@@ -233,7 +232,6 @@ if (defined $status and defined $packages)
 	Origin => 'Debian',
 	Label => 'Debian',
 	Archive => 'stable',
-	Architecture => 'i386',
 	Version => '3.0',
 	Component => 'main',
 	IndexType => 'Debian Package Index',
@@ -242,7 +240,7 @@ if (defined $status and defined $packages)
 else
 {
     print "not ok 34 # bad ->files\n";
-    print "ok $_ # skip\n" for 35..47;
+    print "ok $_ # skip\n" for 35..46;
 }
 
 if (my $p = $cache->packages)
@@ -250,9 +248,9 @@ if (my $p = $cache->packages)
     # check by name
     if (my $a = $p->lookup('a'))
     {
-	print "ok 48\n";
+	print "ok 47\n";
 
-	check_keys 49, $a, {
+	check_keys 48, $a, {
 	    Name => 'a',
 	    Section => 'test',
 	    VerStr => '0.5',
@@ -265,8 +263,8 @@ if (my $p = $cache->packages)
     }
     else
     {
-	print "not ok 48 # lookup by name failed\n";
-	print "ok $_ # skip\n" for 49..56;
+	print "not ok 47 # lookup by name failed\n";
+	print "ok $_ # skip\n" for 47..55;
     }
 
     # check by verfile
@@ -274,9 +272,9 @@ if (my $p = $cache->packages)
     {
 	if (my $b = $p->lookup($verfile))
 	{
-	    print "ok 57\n";
+	    print "ok 56\n";
 
-	    check_keys 58, $b, {
+	    check_keys 57, $b, {
 		Name => 'b',
 		Maintainer => 'Brendan O\'Dea <bod@debian.org>',
 		FileName => 'pool/main/b/b/b_0.3-1_i386.deb',
@@ -287,17 +285,17 @@ if (my $p = $cache->packages)
 	}
 	else
 	{
-	    print "not ok 57 # lookup by verfile failed\n";
-	    print "ok $_ # skip\n" for 58..63;
+	    print "not ok 56 # lookup by verfile failed\n";
+	    print "ok $_ # skip\n" for 57..62;
 	}
     }
     else
     {
-	print "ok $_ # skip\n" for 57..63;
+	print "ok $_ # skip\n" for 56..62;
     }
 }
 else
 {
-    print "not ok 48 # bad ->packages\n";
-    print "ok $_ # skip\n" for 49..63;
+    print "not ok 47 # bad ->packages\n";
+    print "ok $_ # skip\n" for 48..62;
 }

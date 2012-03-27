@@ -1,5 +1,3 @@
-/* $Id: utils.c,v 1.2 2002-07-31 05:20:41 bod Exp $ */
-
 #define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"

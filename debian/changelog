@@ -1,3 +1,13 @@
+libapt-pkg-perl (0.1.26) unstable; urgency=low
+
+  * Update MANIFEST.
+  * Switch to non-deprecated pkgCacheFile::Open method.
+  * Remove old CVS keywords.
+  * Drop Architecture from pkgCache::PkgFileIterator as this field is no
+    longer populated by debListParser::LoadReleaseInfo().
+
+ -- Brendan O'Dea <bod@debian.org>  Tue, 27 Mar 2012 22:41:35 +1100
+
 libapt-pkg-perl (0.1.25) unstable; urgency=low
 
   * Update Vcs-Git and Vcs-Browser fields.

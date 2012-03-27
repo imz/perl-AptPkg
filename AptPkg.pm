@@ -1,7 +1,5 @@
 package AptPkg;
 
-# $Id: AptPkg.pm,v 1.12 2007-06-17 12:08:59 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
@@ -9,7 +7,7 @@ use warnings;
 require DynaLoader;
 
 our @ISA = qw(DynaLoader);
-our $VERSION = qw$Revision: 1.12 $[1] || 0.1;
+our $VERSION = 1.13;
 
 bootstrap AptPkg $VERSION;
 
@@ -139,7 +137,7 @@ The AptPkg::Cache::_pkg_file package wraps a Perl class around the
 pkgCache::PkgFileIterator class.  It exposes the following methods:
 
     FileName, Archive, Component, Version, Origin, Label, Site,
-    Architecture, IndexType and Index.
+    IndexType and Index.
 
 =head2 AptPkg::Cache::_ver_file
 

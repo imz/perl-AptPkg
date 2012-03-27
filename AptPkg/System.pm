@@ -1,7 +1,5 @@
 package AptPkg::System;
 
-# $Id: System.pm,v 1.4 2005-08-07 14:03:02 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
@@ -13,7 +11,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw($_system);
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.4 $[1] || 0.1;
+our $VERSION = 1.4;
 our $_system;
 
 sub label      { shift->Label(@_) }

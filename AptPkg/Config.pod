@@ -1,5 +1,3 @@
-# $Id: Config.pod,v 1.5 2002-07-28 23:01:39 bod Exp $
-
 #
 # This is not in Config.pm as MakeMaker can't be convinced to build a
 # manpage matching /setup|config/i

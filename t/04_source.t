@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: 04_source.t,v 1.2 2004-06-20 11:19:53 bod Exp $
 # AptPkg::Source tests
 
 BEGIN { print "1..14\n" }

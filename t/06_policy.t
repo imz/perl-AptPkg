@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: 06_policy.t,v 1.1 2007-06-17 12:09:00 bod Exp $
 # AptPkg::Policy tests
 
 BEGIN { print "1..10\n" }

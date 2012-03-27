@@ -1,13 +1,11 @@
 package AptPkg::PkgRecords;
 
-# $Id: PkgRecords.pm,v 1.1 2007-06-17 12:09:00 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
 use AptPkg;
 
-our $VERSION = qw$Revision: 1.1 $[1] || 0.1;
+our $VERSION = 1.1;
 
 sub lookup
 {
