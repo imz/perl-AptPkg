@@ -1,8 +1,6 @@
 #!/usr/bin/perl
 
 #
-# $Id: apt-config,v 1.2 2000-10-18 07:24:49 bod Exp $
-#
 # Example: apt-config in perl.  See apt-config(8).
 #
 

@@ -1,7 +1,5 @@
 package AptPkg::Version;
 
-# $Id: Version.pm,v 1.7 2007-06-17 12:09:00 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
@@ -14,7 +12,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw();
 our @EXPORT = ();
 
-our $VERSION = qw$Revision: 1.7 $[1] || 0.1;
+our $VERSION = 1.7;
 
 sub label       { shift->Label(@_) }
 sub compare     { shift->CmpVersion(@_) }

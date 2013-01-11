@@ -1,13 +1,11 @@
 package AptPkg::hash;
 
-# $Id: hash.pm,v 1.6 2007-06-13 13:46:19 bod Exp $
-
 require 5.005_62;
 use strict;
 use warnings;
 use Scalar::Util 'weaken';
 
-our $VERSION = qw$Revision: 1.6 $[1] || 0.1;
+our $VERSION = 1.6;
 
 sub new
 {

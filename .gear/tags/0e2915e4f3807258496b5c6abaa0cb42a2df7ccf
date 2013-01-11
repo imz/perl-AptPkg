@@ -1,0 +1,6 @@
+object e4ccd29e03f0e86e49c4e3351cbd655b88bd4f2c
+type commit
+tag v0.1.26
+tagger Dmitry V. Levin <ldv@altlinux.org> 1332849755 +0000
+
+libapt-pkg-perl 0.1.26

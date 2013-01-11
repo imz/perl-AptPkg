@@ -1,8 +1,6 @@
 #!/usr/bin/perl
 
 #
-# $Id: apt-version,v 1.2 2004-10-14 00:50:02 bod Exp $
-#
 # Example: demonstrate APT version methods
 #
 # Usage: apt-version compare VER1 VER2

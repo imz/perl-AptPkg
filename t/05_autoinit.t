@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: 05_autoinit.t,v 1.1 2003-06-09 12:26:56 bod Exp $
 # AptPkg::Cache auto-init test
 
 BEGIN { print "1..3\n" }

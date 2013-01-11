@@ -1,2 +1,2 @@
-tar: @version@:. name=libapt-pkg-perl-@version@
-diff: @version@:. . name=perl-AptPkg-@version@-@release@.patch
+tar: v@version@:. name=libapt-pkg-perl-@version@
+diff: v@version@:. . name=perl-AptPkg-@version@-@release@.patch

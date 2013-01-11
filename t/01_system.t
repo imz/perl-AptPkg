@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: 01_system.t,v 1.2 2004-10-14 00:50:02 bod Exp $
 # AptPkg::System tests
 
 BEGIN { print "1..2\n" }

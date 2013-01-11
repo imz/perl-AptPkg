@@ -1,8 +1,6 @@
 #!/usr/bin/perl
 
 #
-# $Id: apt-cache,v 1.3 2007-06-17 12:09:00 bod Exp $
-#
 # Example: demonstrate accessing the package cache
 #
 # Usage: apt-cache PACKAGE
