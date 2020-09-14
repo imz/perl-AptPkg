@@ -35,6 +35,9 @@ inspection of the binary package cache and source package details.
 %remove_optflags -Wno-error
 %endif
 
+# To avoid some errors on API change:
+%add_optflags -Werror=overloaded-virtual
+
 %perl_vendor_build INC=-I%_includedir/rpm %{?!_without_test:%{?!_disable_test:||:}}
 
 %install
