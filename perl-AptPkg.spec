@@ -3,7 +3,7 @@
 
 Name: perl-AptPkg
 Version: 0.1.26
-Release: alt5.M80P.1
+Release: alt6
 
 Summary: Perl interface to libapt-pkg
 License: GPLv2+
@@ -55,7 +55,9 @@ inspection of the binary package cache and source package details.
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
-* Tue Sep 15 2020 Ivan Zakharyaschev <imz@altlinux.org> 0.1.26-alt5.M80P.1
+* Tue Sep 15 2020 Ivan Zakharyaschev <imz@altlinux.org> 0.1.26-alt6
+- Adapted to changed API in apt-0.5.15lorg2-alt72
+  (pkgCacheFile class in RAII style).
 - (.spec) Just added some compiler flags (which don't change anything)
   to be sure that APT API has not been used wrongly and will not be.
   (Namely, to be sure that if a method override was intended, it would
