@@ -29,9 +29,7 @@ inspection of the binary package cache and source package details.
 
 %build
 # Needed by APT API:
-%ifarch %e2k
-%add_optflags -std=c++14
-%endif
+%add_optflags -std=gnu++17
 
 %ifarch %e2k
 %remove_optflags -Wno-error
