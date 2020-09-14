@@ -27,10 +27,8 @@ inspection of the binary package cache and source package details.
 cp -a /etc/apt/* t/cache/etc/
 
 %build
-# Needed by APT API:
-%ifarch %e2k
-%add_optflags -std=c++14
-%endif
+# Ensure the code can be compiled as C++11 (and the future GCC default dialect).
+%add_optflags -std=gnu++11
 
 %perl_vendor_build INC=-I%_includedir/rpm ||:
 
