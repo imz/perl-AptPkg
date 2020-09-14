@@ -3,7 +3,7 @@
 
 Name: perl-AptPkg
 Version: 0.1.26
-Release: alt5
+Release: alt5.M80P.1
 
 Summary: Perl interface to libapt-pkg
 License: GPLv2+
@@ -57,6 +57,13 @@ inspection of the binary package cache and source package details.
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Tue Sep 15 2020 Ivan Zakharyaschev <imz@altlinux.org> 0.1.26-alt5.M80P.1
+- (.spec) Just added some compiler flags (which don't change anything)
+  to be sure that APT API has not been used wrongly and will not be.
+  (Namely, to be sure that if a method override was intended, it would
+  actually be overriding and not hiding a virtual method and that it
+  would be marked "override" for future.)
+
 * Thu Jul 11 2019 Aleksei Nikiforov <darktemplar@altlinux.org> 0.1.26-alt5
 - Rebuilt with new Apt
 
