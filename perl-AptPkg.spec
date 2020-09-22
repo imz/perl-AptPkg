@@ -14,7 +14,8 @@ Source: libapt-pkg-perl-%version.tar
 Patch: %name-%version-%release.patch
 
 # Automatically added by buildreq on Wed Oct 12 2011
-BuildRequires: apt gcc-c++ libapt-devel perl-devel
+BuildRequires: gcc-c++ libapt-devel perl-devel
+%{?!_without_test:%{?!_disable_test:BuildPreReq: apt}}
 
 %description
 A Perl interface to APT's libapt-pkg which provides modules
@@ -24,13 +25,13 @@ inspection of the binary package cache and source package details.
 %prep
 %setup -n libapt-pkg-perl-%version
 %patch -p1
-cp -a /etc/apt/* t/cache/etc/
+%{?!_without_test:%{?!_disable_test:cp -a /etc/apt/* t/cache/etc/}}
 
 %build
 # Ensure the code can be compiled as C++11 (and the future GCC default dialect).
 %add_optflags -std=gnu++11
 
-%perl_vendor_build INC=-I%_includedir/rpm ||:
+%perl_vendor_build INC=-I%_includedir/rpm %{?!_without_test:%{?!_disable_test:||:}}
 
 %install
 %perl_vendor_install
