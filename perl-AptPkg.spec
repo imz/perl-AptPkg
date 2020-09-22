@@ -31,6 +31,10 @@ inspection of the binary package cache and source package details.
 # Ensure the code can be compiled as C++11 (and the future GCC default dialect).
 %add_optflags -std=gnu++11
 
+%ifarch %e2k
+%remove_optflags -Wno-error
+%endif
+
 %perl_vendor_build INC=-I%_includedir/rpm %{?!_without_test:%{?!_disable_test:||:}}
 
 %install
