@@ -40,9 +40,7 @@ inspection of the binary package cache and source package details.
 # To avoid some errors on API change:
 %add_optflags -Werror=overloaded-virtual
 # A style enforcement: always use the keyword, which helps to avoid API misuse
-%ifnarch %e2k
 %add_optflags -Werror=suggest-override
-%endif
 
 %perl_vendor_build INC=-I%_includedir/rpm %{?!_without_test:%{?!_disable_test:||:}}
 
