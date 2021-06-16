@@ -450,21 +450,24 @@ pkgVersioningSystem::UpstreamVersion(str)
 MODULE = AptPkg  PACKAGE = AptPkg::_cache
 
 pkgCacheFile *
-pkgCacheFile::new()
+pkgCacheFile::new(lock = false)
+    bool lock
   PREINIT:
     auto_init(aTHX_ INIT_CONFIG|INIT_SYSTEM);
+
+  C_ARGS:
+    lock
 
 void
 pkgCacheFile::DESTROY()
 
 bool
-pkgCacheFile::Open(lock = false)
-    bool lock
+pkgCacheFile::Open()
   PREINIT:
     OpTextProgress progress(*_config);
 
   C_ARGS:
-    progress, lock
+    progress
 
   POSTCALL:
     handle_errors(0);
