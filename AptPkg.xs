@@ -469,9 +469,6 @@ pkgCacheFile::Open(lock = false)
   POSTCALL:
     handle_errors(0);
 
-void
-pkgCacheFile::Close()
-
 pkgCache_PkgIterator_p *
 pkgCacheFile::FindPkg(name)
     string name
