@@ -525,7 +525,8 @@ pkgCacheFile::Packages()
 pkgPolicy_p *
 pkgCacheFile::Policy()
   CODE:
-    pkgPolicy *p = THIS->Policy;
+    OpTextProgress progress(*_config);
+    pkgPolicy *p = THIS->GetPolicy(progress);
     if (!p)
 	XSRETURN_UNDEF;
 
