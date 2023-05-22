@@ -3,7 +3,7 @@
 
 Name: perl-AptPkg
 Version: 0.1.26
-Release: alt6
+Release: alt7
 
 Summary: Perl interface to libapt-pkg
 License: GPLv2+
@@ -55,6 +55,10 @@ inspection of the binary package cache and source package details.
 	%perl_vendor_autolib/AptPkg/AptPkg.so
 
 %changelog
+* Mon May 22 2023 Ivan Zakharyaschev <imz@altlinux.org> 0.1.26-alt7
+- Adapted to changed API in apt-0.5.15lorg2-alt84
+  (the restriction of careless conversions of file sizes).
+
 * Tue Sep 15 2020 Ivan Zakharyaschev <imz@altlinux.org> 0.1.26-alt6
 - Adapted to changed API in apt-0.5.15lorg2-alt72
   (pkgCacheFile class in RAII style).
