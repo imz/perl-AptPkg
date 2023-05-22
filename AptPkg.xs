@@ -1058,7 +1058,8 @@ pkgCache_VerFileIterator_p::Index()
 off_t
 pkgCache_VerFileIterator_p::Offset()
   CODE:
-    RETVAL = (*THIS->obj)->Offset;
+    if (! SafeAssign_u(RETVAL, (*THIS->obj).Offset()))
+      RETVAL = -1; // the stored value is too big (unexpected)
 
   OUTPUT:
     RETVAL
